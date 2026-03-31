@@ -1,44 +1,61 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium English B1 Masterclass for Stage & Social Events">
     <title>Masterclass Premium: English B1 for Stage & Social</title>
     
-    <!-- Tailwind CSS (Script CDN para configuración avanzada) -->
+    <!-- Tailwind CSS (CDN Script for advanced configuration) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        navy: { 50: '#e6e9ef', 100: '#b0b9cb', 500: '#2a4365', 800: '#112240', 900: '#0A192F' },
-                        gold: { 100: '#f9f6f0', 300: '#e6d5b8', 500: '#C5A880', 700: '#9b8464' }
+                        navy: { 50: '#e6e9ef', 100: '#b0b9cb', 200: '#8b9bb4', 300: '#657d9c', 400: '#486283', 500: '#2a4365', 600: '#233855', 700: '#1b2d44', 800: '#112240', 900: '#0A192F' },
+                        gold: { 50: '#fcfaf7', 100: '#f9f6f0', 200: '#f0e8d9', 300: '#e6d5b8', 400: '#d4bd94', 500: '#C5A880', 600: '#b39162', 700: '#9b8464', 800: '#826f55', 900: '#6a5a46' }
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'fade-in-down': 'fadeInDown 0.5s ease-out forwards',
-                        'shake': 'shake 0.4s ease-in-out',
+                        'fade-in-down': 'fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in-left': 'fadeInLeft 0.5s ease-out forwards',
+                        'fade-in-right': 'fadeInRight 0.5s ease-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 3s ease-in-out infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'bounce-slight': 'bounceSlight 2s infinite'
                     },
                     keyframes: {
                         fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         fadeInDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                            '0%': { opacity: '0', transform: 'translateY(-40px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        fadeInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(40px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
                         },
                         shake: {
                             '0%, 100%': { transform: 'translateX(0)' },
-                            '25%': { transform: 'translateX(-6px)' },
-                            '75%': { transform: 'translateX(6px)' },
+                            '20%, 60%': { transform: 'translateX(-8px)' },
+                            '40%, 80%': { transform: 'translateX(8px)' },
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        bounceSlight: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
                         }
                     }
                 }
@@ -46,34 +63,69 @@
         }
     </script>
     
-    <!-- React & ReactDOM (Producción) -->
+    <!-- React & ReactDOM (Production Minified) -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Babel (Para compilar JSX) -->
+    <!-- Babel (In-browser JSX compilation) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* Estilos base y utilidades complejas que Tailwind CDN no maneja bien en línea */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; }
+        /* Base Styles & Typography Overrides */
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f8f9fa; 
+            overflow: hidden; /* Prevent body scroll, handle inside app */
+        }
         
-        /* Perspectiva para Flashcards 3D */
+        /* 3D Transform Utilities for Flashcards */
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
         
-        /* Scrollbar elegante */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #C5A880; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9b8464; }
+        /* Elegant Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d4bd94; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b39162; }
 
-        /* Timer Circular SVG */
+        /* SVG Circular Timer Styles */
         .progress-ring__circle {
-            transition: stroke-dashoffset 1s linear;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
+        }
+
+        /* Dotted Background Pattern */
+        .bg-dot-pattern {
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .glass-panel-dark {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Input specific styles for Fill in the Blanks */
+        .fib-input {
+            width: 120px;
+            transition: all 0.3s ease;
+        }
+        .fib-input:focus {
+            width: 140px;
+            outline: none;
+            border-bottom-color: #C5A880;
         }
     </style>
 </head>
@@ -84,7 +136,7 @@
         const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
         // =====================================================================
-        // 1. SISTEMA DE AUDIO (Sintetizador + TTS)
+        // 1. AUDIO SYSTEM (Web Audio API Synthesizer & TTS)
         // =====================================================================
         
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -96,29 +148,50 @@
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
-            if (type === 'correct') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1); // C6
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 0.3);
-            } else if (type === 'wrong') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 0.2);
-            } else if (type === 'tick') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-                osc.start(audioCtx.currentTime);
-                osc.stop(audioCtx.currentTime + 0.05);
+            const now = audioCtx.currentTime;
+            
+            switch(type) {
+                case 'correct':
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.1); // C6
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                    break;
+                case 'wrong':
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                    break;
+                case 'tick':
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(800, now);
+                    gainNode.gain.setValueAtTime(0.1, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                    break;
+                case 'fanfare':
+                    // Simple synthesized chord for graduation
+                    [523.25, 659.25, 783.99].forEach(freq => { // C Major chord
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.type = 'square';
+                        o.frequency.setValueAtTime(freq, now);
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        g.gain.setValueAtTime(0.1, now);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+                        o.start(now);
+                        o.stop(now + 1.5);
+                    });
+                    break;
             }
         };
 
@@ -127,20 +200,28 @@
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.85; // Velocidad ideal para B1
+                utterance.rate = 0.85; // B1 friendly speed
                 
                 const voices = window.speechSynthesis.getVoices();
-                // Buscar voz femenina de US o UK, o la primera en inglés
+                // Prefer Female US/UK voice
                 const englishVoice = voices.find(v => v.lang.includes('en-US') && v.name.includes('Female')) 
+                                  || voices.find(v => v.lang.includes('en-GB') && v.name.includes('Female'))
                                   || voices.find(v => v.lang.includes('en'));
                 if (englishVoice) utterance.voice = englishVoice;
                 
                 window.speechSynthesis.speak(utterance);
+            } else {
+                console.warn("Speech Synthesis not supported in this browser.");
             }
         };
 
+        // Initialize voices early to avoid first-load delays (Browser bug workaround)
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+        }
+
         // =====================================================================
-        // 2. LIBRERÍA DE ICONOS SVG (Sin dependencias externas)
+        // 2. SVG ICON LIBRARY (Zero External Dependencies)
         // =====================================================================
 
         const Icons = {
@@ -154,18 +235,27 @@
             Star: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
             Refresh: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>,
             Play: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>,
-            Award: ({ size=40, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            Award: ({ size=40, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>,
+            Globe: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>,
+            Heart: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>,
+            User: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
+            Message: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>,
+            Sparkles: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 3v18"></path><path d="M3 12h18"></path><path d="m5 5 14 14"></path><path d="m19 5-14 14"></path></svg>,
+            Lock: ({ size=16, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
+            BookOpen: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>,
+            Lightbulb: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
         };
 
         // =====================================================================
-        // 3. COMPONENTES UI REUTILIZABLES
+        // 3. REUSABLE UI COMPONENTS
         // =====================================================================
 
-        const TTSButton = ({ text, className="" }) => (
+        const TTSButton = ({ text, className="", title="Listen to pronunciation" }) => (
             <button 
                 onClick={(e) => { e.stopPropagation(); speakText(text); }}
-                className={`p-2 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 ${className}`}
-                title="Escuchar pronunciación"
+                className={`p-2 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 flex-shrink-0 ${className}`}
+                title={title}
+                aria-label={title}
             >
                 <Icons.Volume size={18} />
             </button>
@@ -173,26 +263,27 @@
 
         const Chunk = ({ type, children }) => {
             const styles = {
-                so: "bg-blue-100 text-blue-800 border-blue-200",
-                such: "bg-orange-100 text-orange-800 border-orange-200",
-                adj: "bg-green-100 text-green-800 border-green-200",
-                noun: "bg-purple-100 text-purple-800 border-purple-200",
-                that: "bg-red-100 text-red-800 border-red-200"
+                so: "bg-blue-100 text-blue-800 border-blue-300",
+                such: "bg-orange-100 text-orange-800 border-orange-300",
+                adj: "bg-green-100 text-green-800 border-green-300",
+                noun: "bg-purple-100 text-purple-800 border-purple-300",
+                that: "bg-red-100 text-red-800 border-red-300",
+                quantifier: "bg-pink-100 text-pink-800 border-pink-300"
             };
             return (
-                <span className={`inline-block px-2 py-1 mx-1 rounded-md font-semibold border ${styles[type]} shadow-sm transition-transform hover:-translate-y-1`}>
+                <span className={`inline-block px-2 py-1 mx-1 rounded-md font-bold border ${styles[type]} shadow-sm transition-transform hover:-translate-y-1`}>
                     {children}
                 </span>
             );
         };
 
         const Button = ({ children, onClick, disabled, variant='primary', className="", icon: Icon }) => {
-            const base = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-md active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
+            const base = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-sm active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
             const variants = {
-                primary: "bg-navy-900 text-white hover:bg-navy-800 hover:shadow-lg",
-                secondary: "bg-gold-500 text-navy-900 hover:bg-gold-300 hover:shadow-lg",
+                primary: "bg-navy-900 text-white hover:bg-navy-800 hover:shadow-lg hover:-translate-y-0.5 border border-transparent",
+                secondary: "bg-gold-500 text-navy-900 hover:bg-gold-400 hover:shadow-lg border border-transparent",
                 outline: "border-2 border-navy-900 text-navy-900 hover:bg-navy-50",
-                ghost: "bg-transparent text-gray-500 shadow-none hover:bg-gray-100"
+                ghost: "bg-transparent text-gray-600 shadow-none hover:bg-gray-100 hover:text-navy-900"
             };
             return (
                 <button onClick={onClick} disabled={disabled} className={`${base} ${variants[variant]} ${className}`}>
@@ -202,23 +293,45 @@
             );
         };
 
+        const Badge = ({ children, color="navy" }) => {
+            const colors = {
+                navy: "bg-navy-100 text-navy-800 border-navy-200",
+                gold: "bg-gold-100 text-gold-800 border-gold-200",
+                green: "bg-green-100 text-green-800 border-green-200"
+            };
+            return (
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border ${colors[color]}`}>
+                    {children}
+                </span>
+            );
+        };
+
         // =====================================================================
-        // 4. COMPONENTES INTERACTIVOS AVANZADOS
+        // 4. INTERACTIVE ACTIVITY COMPONENTS
         // =====================================================================
 
-        // 4.1 Flashcards 3D
-        const FlashcardDeck = ({ cards }) => {
+        // 4.1 3D Flashcards Deck
+        const FlashcardDeck = ({ cards, deckName }) => {
             const [currentIndex, setCurrentIndex] = useState(0);
             const [isFlipped, setIsFlipped] = useState(false);
 
-            const nextCard = () => { setIsFlipped(false); setTimeout(() => setCurrentIndex(p => (p + 1) % cards.length), 150); };
-            const prevCard = () => { setIsFlipped(false); setTimeout(() => setCurrentIndex(p => (p === 0 ? cards.length - 1 : p - 1)), 150); };
+            const nextCard = () => { 
+                setIsFlipped(false); 
+                setTimeout(() => setCurrentIndex(p => (p + 1) % cards.length), 150); 
+            };
+            const prevCard = () => { 
+                setIsFlipped(false); 
+                setTimeout(() => setCurrentIndex(p => (p === 0 ? cards.length - 1 : p - 1)), 150); 
+            };
 
             const card = cards[currentIndex];
 
             return (
                 <div className="w-full max-w-md mx-auto flex flex-col items-center">
-                    <div className="text-gray-400 font-medium mb-4 tracking-widest text-sm uppercase">Tarjeta {currentIndex + 1} de {cards.length}</div>
+                    <div className="flex justify-between w-full items-center mb-6">
+                        <Badge color="gold">{deckName}</Badge>
+                        <span className="text-gray-400 font-bold text-sm">Card {currentIndex + 1} of {cards.length}</span>
+                    </div>
                     
                     <div 
                         className="relative w-full h-80 perspective-1000 cursor-pointer group"
@@ -226,35 +339,36 @@
                     >
                         <div className={`w-full h-full absolute transition-all duration-700 transform-style-3d shadow-2xl rounded-2xl ${isFlipped ? 'rotate-y-180' : ''}`}>
                             
-                            {/* Frente (Inglés) */}
-                            <div className="absolute w-full h-full backface-hidden bg-white rounded-2xl border-b-8 border-navy-900 flex flex-col items-center justify-center p-8 text-center">
+                            {/* Front (English Term) */}
+                            <div className="absolute w-full h-full backface-hidden bg-white rounded-2xl border-b-8 border-navy-900 flex flex-col items-center justify-center p-8 text-center group-hover:border-gold-500 transition-colors">
                                 <TTSButton text={card.term} className="absolute top-4 right-4 bg-navy-50 text-navy-900" />
+                                {card.icon && <card.icon size={48} className="text-gold-500 mb-6 opacity-80" />}
                                 <h3 className="text-4xl font-extrabold text-navy-900 mb-2">{card.term}</h3>
-                                <p className="text-gray-400 text-sm mt-4 italic">Toca para ver el significado</p>
+                                <p className="text-gray-400 text-sm mt-4 font-medium tracking-wide">TAP TO FLIP</p>
                             </div>
 
-                            {/* Reverso (Español & Ejemplo) */}
+                            {/* Back (Definition & Example) */}
                             <div className="absolute w-full h-full backface-hidden bg-navy-900 rounded-2xl rotate-y-180 flex flex-col items-center justify-center p-8 text-center text-white border-b-8 border-gold-500">
-                                <h4 className="text-gold-500 font-bold uppercase tracking-wider mb-2 text-sm">Significado</h4>
-                                <p className="text-xl mb-6">{card.def}</p>
-                                <div className="bg-white/10 p-4 rounded-xl w-full">
-                                    <h4 className="text-gold-300 font-semibold text-xs mb-2">EJEMPLO</h4>
-                                    <p className="italic text-gray-200" dangerouslySetInnerHTML={{ __html: card.example }}></p>
-                                    <TTSButton text={card.exampleRaw} className="mt-2 text-gold-500 hover:bg-gold-500 hover:text-navy-900 bg-white/5" />
+                                <h4 className="text-gold-500 font-bold uppercase tracking-widest mb-2 text-xs opacity-80">Meaning</h4>
+                                <p className="text-xl mb-6 font-light leading-snug">{card.def}</p>
+                                <div className="bg-white/10 p-4 rounded-xl w-full border border-white/5">
+                                    <h4 className="text-gold-300 font-semibold text-xs mb-2 tracking-widest uppercase">Example in Context</h4>
+                                    <p className="italic text-gray-200 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: card.example }}></p>
+                                    <TTSButton text={card.exampleRaw} className="mt-4 text-gold-500 hover:bg-gold-500 hover:text-navy-900 bg-white/5" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex gap-4 mt-8">
-                        <Button variant="outline" onClick={prevCard} icon={Icons.ChevronLeft} className="w-16 h-16 p-0 rounded-full justify-center"></Button>
-                        <Button variant="outline" onClick={nextCard} className="w-16 h-16 p-0 rounded-full justify-center"><Icons.ChevronRight size={20} /></Button>
+                    <div className="flex gap-4 mt-8 w-full">
+                        <Button variant="outline" onClick={prevCard} icon={Icons.ChevronLeft} className="flex-1 justify-center py-4 bg-white border-gray-200 hover:border-navy-900">Prev</Button>
+                        <Button variant="primary" onClick={nextCard} className="flex-1 justify-center py-4">Next <Icons.ChevronRight size={20}/></Button>
                     </div>
                 </div>
             );
         };
 
-        // 4.2 Cuestionario Dinámico (MCQ)
+        // 4.2 Dynamic MCQ Quiz
         const QuizMCQ = ({ questions }) => {
             const [currentQ, setCurrentQ] = useState(0);
             const [selected, setSelected] = useState(null);
@@ -282,6 +396,7 @@
                     setSelected(null);
                     setShowExplanation(false);
                 } else {
+                    playSound('fanfare');
                     setIsFinished(true);
                 }
             };
@@ -291,12 +406,20 @@
             };
 
             if (isFinished) {
+                const percentage = (score / questions.length) * 100;
                 return (
-                    <div className="bg-white p-10 rounded-2xl shadow-xl text-center border-t-8 border-gold-500 animate-fade-in-up">
-                        <Icons.Award size={64} className="mx-auto text-gold-500 mb-6 animate-pulse-slow" />
-                        <h3 className="text-3xl font-bold text-navy-900 mb-2">¡Completado!</h3>
-                        <p className="text-xl text-gray-600 mb-8">Puntuación: <strong className="text-navy-900">{score} / {questions.length}</strong></p>
-                        <Button onClick={reset} variant="primary" className="mx-auto" icon={Icons.Refresh}>Intentar de nuevo</Button>
+                    <div className="glass-panel p-10 rounded-3xl shadow-xl text-center border-t-8 border-gold-500 animate-fade-in-up">
+                        <Icons.Award size={80} className={`mx-auto mb-6 ${percentage === 100 ? 'text-gold-500 animate-pulse-slow' : 'text-navy-300'}`} />
+                        <h3 className="text-3xl font-extrabold text-navy-900 mb-2">Quiz Completed!</h3>
+                        <p className="text-xl text-gray-600 mb-8">Your Score: <strong className="text-navy-900 text-2xl">{score} / {questions.length}</strong></p>
+                        
+                        {percentage === 100 ? (
+                            <p className="text-green-600 font-bold mb-8">Flawless execution! You are ready for the stage.</p>
+                        ) : (
+                            <p className="text-orange-500 font-bold mb-8">Great effort! Review the rules and try for a perfect score.</p>
+                        )}
+
+                        <Button onClick={reset} variant="primary" className="mx-auto" icon={Icons.Refresh}>Try Again</Button>
                     </div>
                 );
             }
@@ -304,13 +427,13 @@
             const q = questions[currentQ];
 
             return (
-                <div className="bg-white p-8 rounded-2xl shadow-xl animate-fade-in-up border border-gray-100">
-                    <div className="flex justify-between items-center mb-6 text-sm font-bold text-gray-400">
-                        <span>Pregunta {currentQ + 1} de {questions.length}</span>
-                        <span>Puntuación: {score}</span>
+                <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl animate-fade-in-right border border-gray-100">
+                    <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
+                        <Badge color="navy">Question {currentQ + 1} of {questions.length}</Badge>
+                        <span className="font-bold text-gray-400">Score: {score}</span>
                     </div>
                     
-                    <h3 className="text-2xl font-semibold text-navy-900 mb-8">{q.text}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-8 leading-tight">{q.text}</h3>
                     
                     <div className="space-y-4">
                         {q.options.map((opt, idx) => {
@@ -318,12 +441,12 @@
                             const isCorrect = q.ans === idx;
                             const showStatus = selected !== null;
                             
-                            let btnClass = "w-full p-4 rounded-xl border-2 text-left font-medium text-lg flex items-center justify-between transition-all duration-300 ";
+                            let btnClass = "w-full p-5 rounded-xl border-2 text-left font-bold text-lg flex items-center justify-between transition-all duration-300 focus:outline-none ";
                             
                             if (!showStatus) {
-                                btnClass += "border-gray-200 text-gray-700 hover:border-gold-500 hover:bg-gold-50";
+                                btnClass += "border-gray-200 text-navy-800 hover:border-gold-500 hover:bg-gold-50 hover:-translate-y-1 shadow-sm";
                             } else if (isCorrect) {
-                                btnClass += "border-green-500 bg-green-50 text-green-700 shadow-md";
+                                btnClass += "border-green-500 bg-green-50 text-green-700 shadow-md transform scale-[1.02]";
                             } else if (isSelected && !isCorrect) {
                                 btnClass += "border-red-500 bg-red-50 text-red-700 animate-shake";
                             } else {
@@ -332,32 +455,243 @@
 
                             return (
                                 <button key={idx} disabled={showStatus} onClick={() => handleAnswer(idx)} className={btnClass}>
-                                    <span>{opt}</span>
-                                    {showStatus && isCorrect && <Icons.Check className="text-green-600" />}
-                                    {showStatus && isSelected && !isCorrect && <Icons.X className="text-red-600" />}
+                                    <span className="flex items-center gap-3">
+                                        <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm ${!showStatus ? 'bg-gray-100 text-gray-500' : isCorrect ? 'bg-green-200 text-green-800' : isSelected ? 'bg-red-200 text-red-800' : 'bg-gray-100'}`}>
+                                            {String.fromCharCode(65 + idx)}
+                                        </span>
+                                        {opt}
+                                    </span>
+                                    {showStatus && isCorrect && <Icons.Check className="text-green-600" size={24} />}
+                                    {showStatus && isSelected && !isCorrect && <Icons.X className="text-red-600" size={24} />}
                                 </button>
                             );
                         })}
                     </div>
 
                     {showExplanation && (
-                        <div className="mt-8 p-6 bg-navy-50 rounded-xl border-l-4 border-navy-900 animate-fade-in-down">
-                            <h4 className="text-navy-900 font-bold mb-2">Explicación:</h4>
-                            <p className="text-gray-700 mb-6">{q.explanation}</p>
-                            <Button onClick={nextQuestion} variant="primary" className="w-full" icon={Icons.ChevronRight}>Siguiente</Button>
+                        <div className="mt-8 p-6 bg-navy-50 rounded-xl border-l-4 border-navy-900 animate-fade-in-up">
+                            <div className="flex items-start gap-4">
+                                <Icons.Lightbulb className="text-gold-500 flex-shrink-0 mt-1" />
+                                <div>
+                                    <h4 className="text-navy-900 font-bold mb-2 uppercase tracking-widest text-xs">Explanation</h4>
+                                    <p className="text-gray-700 mb-6 leading-relaxed">{q.explanation}</p>
+                                    <Button onClick={nextQuestion} variant="primary" className="w-full sm:w-auto" icon={Icons.ChevronRight}>Continue</Button>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
             );
         };
 
-        // 4.3 Simulador de Habla (Timer SVG)
+        // 4.3 Fill in the Blanks Activity (New)
+        const FillInTheBlanks = ({ sentences }) => {
+            // Parses string: "I am {so} happy." -> parts: [{text: "I am ", type:"text"}, {answer: "so", type:"input"}, ...]
+            const parseSentence = (str) => {
+                const parts = [];
+                let current = "";
+                let inBracket = false;
+                for(let i=0; i<str.length; i++) {
+                    if (str[i] === '{') {
+                        if (current) parts.push({ type: 'text', value: current });
+                        current = "";
+                        inBracket = true;
+                    } else if (str[i] === '}') {
+                        parts.push({ type: 'input', answer: current.toLowerCase() });
+                        current = "";
+                        inBracket = false;
+                    } else {
+                        current += str[i];
+                    }
+                }
+                if (current) parts.push({ type: 'text', value: current });
+                return parts;
+            };
+
+            const [inputs, setInputs] = useState({});
+            const [status, setStatus] = useState({}); // { inputId: 'correct' | 'wrong' }
+
+            const handleChange = (id, val) => {
+                setInputs(prev => ({ ...prev, [id]: val }));
+                setStatus(prev => ({ ...prev, [id]: null })); // reset status on type
+            };
+
+            const checkAnswers = () => {
+                let allCorrect = true;
+                const newStatus = {};
+                let count = 0;
+                sentences.forEach((s, sIdx) => {
+                    const parts = parseSentence(s);
+                    parts.forEach((p, pIdx) => {
+                        if (p.type === 'input') {
+                            const id = `${sIdx}-${pIdx}`;
+                            const userVal = (inputs[id] || "").trim().toLowerCase();
+                            if (userVal === p.answer) {
+                                newStatus[id] = 'correct';
+                            } else {
+                                newStatus[id] = 'wrong';
+                                allCorrect = false;
+                            }
+                            count++;
+                        }
+                    });
+                });
+                
+                setStatus(newStatus);
+                if (allCorrect) {
+                    playSound('correct');
+                } else {
+                    playSound('wrong');
+                }
+            };
+
+            return (
+                <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 animate-fade-in-up">
+                    <p className="text-gray-500 mb-8 italic">Type the correct word (so / such) in the blanks. Pay attention to the clues!</p>
+                    
+                    <div className="space-y-8 mb-8">
+                        {sentences.map((sentence, sIdx) => {
+                            const parts = parseSentence(sentence);
+                            return (
+                                <div key={sIdx} className="text-xl md:text-2xl leading-loose text-navy-900 font-light">
+                                    {parts.map((part, pIdx) => {
+                                        if (part.type === 'text') return <span key={pIdx}>{part.value}</span>;
+                                        
+                                        const id = `${sIdx}-${pIdx}`;
+                                        const stat = status[id];
+                                        let inputClass = "fib-input mx-2 bg-transparent border-b-2 text-center font-bold text-gold-600 focus:text-navy-900 placeholder-gray-300 ";
+                                        
+                                        if (stat === 'correct') inputClass += "border-green-500 text-green-600 bg-green-50 rounded-t-md";
+                                        else if (stat === 'wrong') inputClass += "border-red-500 text-red-600 bg-red-50 rounded-t-md animate-shake";
+                                        else inputClass += "border-gray-300";
+
+                                        return (
+                                            <input 
+                                                key={pIdx}
+                                                type="text"
+                                                className={inputClass}
+                                                value={inputs[id] || ""}
+                                                onChange={(e) => handleChange(id, e.target.value)}
+                                                placeholder="..."
+                                                autoComplete="off"
+                                                spellCheck="false"
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    
+                    <div className="flex justify-end pt-6 border-t border-gray-100">
+                        <Button onClick={checkAnswers} variant="primary" icon={Icons.Check}>Check Answers</Button>
+                    </div>
+                </div>
+            );
+        };
+
+        // 4.4 Matching Game (Networking)
+        const MatchingGame = () => {
+            const leftItems = [
+                { id: '1', text: "Meeting a judge" },
+                { id: '2', text: "Talking about others" },
+                { id: '3', text: "Ending an interview" },
+                { id: '4', text: "Talking to the host" }
+            ];
+            const rightItems = [
+                { id: '3', text: "\"This is such an unforgettable moment.\"" },
+                { id: '1', text: "\"It is such a pleasure to meet you.\"" },
+                { id: '4', text: "\"Thank you for such a warm welcome.\"" },
+                { id: '2', text: "\"Everyone here is so talented.\"" }
+            ];
+
+            const [selectedLeft, setSelectedLeft] = useState(null);
+            const [matches, setMatches] = useState([]);
+            const [errorState, setErrorState] = useState(false);
+
+            const handleLeftClick = (id) => {
+                if (!matches.includes(id)) {
+                    setSelectedLeft(id);
+                    playSound('tick');
+                }
+            };
+
+            const handleRightClick = (id) => {
+                if (!selectedLeft || matches.includes(id)) return;
+                
+                if (selectedLeft === id) {
+                    setMatches([...matches, id]);
+                    setSelectedLeft(null);
+                    playSound('correct');
+                } else {
+                    setErrorState(true);
+                    playSound('wrong');
+                    setTimeout(() => setErrorState(false), 500);
+                }
+            };
+
+            const isAllMatched = matches.length === leftItems.length;
+
+            return (
+                <div className="w-full">
+                    {isAllMatched && (
+                        <div className="bg-green-100 text-green-800 p-4 rounded-xl mb-6 font-bold flex items-center justify-center gap-2 animate-fade-in-down">
+                            <Icons.Award /> Excellent Networking Skills!
+                        </div>
+                    )}
+                    <div className="flex flex-col md:flex-row gap-8 justify-center items-stretch">
+                        
+                        {/* Context Column */}
+                        <div className="flex-1 flex flex-col gap-4">
+                            <h4 className="text-center text-gold-600 font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2"><Icons.User size={18}/> Situation</h4>
+                            {leftItems.map(item => {
+                                const isMatched = matches.includes(item.id);
+                                const isSelected = selectedLeft === item.id;
+                                return (
+                                    <div key={item.id} onClick={() => handleLeftClick(item.id)}
+                                        className={`p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between font-medium
+                                            ${isMatched ? 'bg-green-500 border-green-500 text-white opacity-50 scale-95' : 
+                                            isSelected ? 'bg-navy-900 border-navy-900 text-white shadow-lg scale-105' : 
+                                            errorState && isSelected ? 'bg-red-50 border-red-500 text-red-700 animate-shake' : 
+                                            'bg-white border-gray-200 text-gray-700 hover:border-gold-500 shadow-sm hover:shadow-md'}`}
+                                    >
+                                        {item.text}
+                                        {isMatched && <Icons.Check />}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        
+                        {/* Phrase Column */}
+                        <div className="flex-1 flex flex-col gap-4">
+                            <h4 className="text-center text-gold-600 font-bold mb-2 uppercase tracking-widest text-sm flex items-center justify-center gap-2"><Icons.Message size={18}/> Perfect Phrase</h4>
+                            {rightItems.map((item, idx) => {
+                                const isMatched = matches.includes(item.id);
+                                return (
+                                    <div key={idx} onClick={() => handleRightClick(item.id)}
+                                        className={`p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center justify-between
+                                            ${isMatched ? 'bg-green-500 border-green-500 text-white opacity-50 scale-95' : 
+                                            'bg-white border-gray-200 text-navy-900 font-medium hover:border-navy-900 shadow-sm hover:shadow-md'}`}
+                                    >
+                                        <span className="italic">{item.text}</span>
+                                        {!isMatched && <TTSButton text={item.text} className="ml-2 scale-90 bg-gray-50 text-gray-400 hover:text-navy-900" />}
+                                        {isMatched && <Icons.Check />}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // 4.5 Speech Simulator (SVG Timer)
         const SpeechSimulator = ({ prompts }) => {
             const [isActive, setIsActive] = useState(false);
             const [time, setTime] = useState(45);
             const [currentPrompt, setCurrentPrompt] = useState(prompts[0]);
             
-            const radius = 60;
+            const radius = 70;
             const circumference = 2 * Math.PI * radius;
             const strokeDashoffset = circumference - (time / 45) * circumference;
 
@@ -367,7 +701,7 @@
                     interval = setInterval(() => {
                         setTime(t => {
                             if (t <= 5 && t > 1) playSound('tick');
-                            if (t === 1) playSound('correct'); // Fin del tiempo
+                            if (t === 1) playSound('wrong'); // Buzzer
                             return t - 1;
                         });
                     }, 1000);
@@ -378,63 +712,82 @@
             }, [isActive, time]);
 
             const startSimulation = () => {
-                setCurrentPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
+                // Ensure a different prompt
+                let nextPrompt;
+                do {
+                    nextPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+                } while(nextPrompt === currentPrompt && prompts.length > 1);
+                
+                setCurrentPrompt(nextPrompt);
                 setTime(45);
                 setIsActive(true);
             };
 
             return (
-                <div className="bg-navy-900 text-white p-10 rounded-3xl shadow-2xl flex flex-col items-center text-center relative overflow-hidden w-full max-w-2xl mx-auto">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500 rounded-full opacity-10 blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                <div className="glass-panel-dark text-white p-10 md:p-14 rounded-[3rem] shadow-2xl flex flex-col items-center text-center relative overflow-hidden w-full max-w-3xl mx-auto border-t-8 border-gold-500">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500 rounded-full opacity-10 blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
                     
-                    <Icons.Mic size={48} className="text-gold-500 mb-6 animate-pulse-slow" />
+                    <Icons.Mic size={56} className="text-gold-500 mb-8 animate-pulse-slow" />
                     
-                    <h3 className="text-gold-500 font-bold tracking-widest uppercase text-sm mb-4">Pregunta del Jurado</h3>
-                    <p className="text-2xl md:text-3xl font-light mb-10 min-h-[100px] flex items-center justify-center">"{currentPrompt}"</p>
+                    <h3 className="text-gold-500 font-bold tracking-widest uppercase text-sm mb-6 flex items-center gap-2">
+                        <Icons.User size={16}/> Interview Question
+                    </h3>
                     
-                    <div className="relative w-48 h-48 mb-10 flex items-center justify-center">
-                        <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 140 140">
-                            <circle cx="70" cy="70" r={radius} stroke="#112240" strokeWidth="8" fill="none" />
+                    <p className="text-3xl md:text-4xl font-light mb-12 min-h-[120px] flex items-center justify-center leading-tight">
+                        "{currentPrompt}"
+                    </p>
+                    
+                    <div className="relative w-56 h-56 mb-12 flex items-center justify-center">
+                        <svg className="absolute top-0 left-0 w-full h-full drop-shadow-lg" viewBox="0 0 160 160">
+                            <circle cx="80" cy="80" r={radius} stroke="rgba(255,255,255,0.1)" strokeWidth="10" fill="none" />
                             <circle 
                                 className="progress-ring__circle" 
-                                cx="70" cy="70" r={radius} 
+                                cx="80" cy="80" r={radius} 
                                 stroke={time <= 10 ? '#ef4444' : '#C5A880'} 
-                                strokeWidth="8" fill="none" 
+                                strokeWidth="10" fill="none" 
                                 strokeDasharray={circumference} 
                                 strokeDashoffset={strokeDashoffset} 
                                 strokeLinecap="round"
                             />
                         </svg>
-                        <div className="text-5xl font-bold font-mono" style={{ color: time <= 10 ? '#ef4444' : 'white' }}>
-                            {time}
+                        <div className="flex flex-col items-center">
+                            <span className="text-6xl font-bold font-mono tracking-tighter" style={{ color: time <= 10 ? '#ef4444' : 'white' }}>
+                                {time}
+                            </span>
+                            <span className="text-sm text-gray-400 uppercase tracking-widest mt-1">SEC</span>
                         </div>
                     </div>
 
-                    {!isActive && time === 45 && (
-                        <Button onClick={startSimulation} variant="secondary" icon={Icons.Play} className="px-8 py-4 text-xl">Comenzar 45s</Button>
-                    )}
-                    {!isActive && time === 0 && (
-                        <Button onClick={startSimulation} variant="primary" icon={Icons.Refresh}>Intentar otra pregunta</Button>
-                    )}
-                    {isActive && (
-                        <p className="text-gold-300 italic animate-pulse">Habla en voz alta ahora...</p>
-                    )}
+                    <div className="h-16 flex items-center justify-center">
+                        {!isActive && time === 45 && (
+                            <Button onClick={startSimulation} variant="secondary" icon={Icons.Play} className="px-10 py-5 text-xl rounded-full">Start 45s Timer</Button>
+                        )}
+                        {!isActive && time === 0 && (
+                            <Button onClick={startSimulation} variant="primary" icon={Icons.Refresh} className="px-8 py-4 bg-white text-navy-900 hover:bg-gray-100 rounded-full">Draw New Question</Button>
+                        )}
+                        {isActive && (
+                            <div className="flex items-center gap-3 text-gold-400 font-bold text-lg animate-pulse bg-gold-900/30 px-6 py-3 rounded-full border border-gold-500/30">
+                                <div className="w-3 h-3 bg-red-500 rounded-full animate-ping"></div> Speak Loudly & Clearly
+                            </div>
+                        )}
+                    </div>
                 </div>
             );
         };
 
-        // 4.4 Confetti Component (Matemático, sin librerías)
+        // 4.6 Confetti Component (Math-based, no libs)
         const Confetti = () => {
             const [particles, setParticles] = useState([]);
             useEffect(() => {
-                const colors = ['#C5A880', '#0A192F', '#ffffff', '#e6d5b8'];
-                const newParticles = Array.from({ length: 100 }).map((_, i) => ({
+                playSound('fanfare');
+                const colors = ['#C5A880', '#0A192F', '#ffffff', '#e6d5b8', '#d4bd94'];
+                const newParticles = Array.from({ length: 120 }).map((_, i) => ({
                     id: i,
                     x: Math.random() * 100, // vw
-                    y: -20 - Math.random() * 100, // vh
-                    size: 5 + Math.random() * 10, // px
+                    y: -20 - Math.random() * 50, // vh
+                    size: 6 + Math.random() * 12, // px
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    duration: 3 + Math.random() * 4, // s
+                    duration: 3 + Math.random() * 5, // s
                     delay: Math.random() * 2 // s
                 }));
                 setParticles(newParticles);
@@ -443,17 +796,18 @@
             return (
                 <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
                     {particles.map(p => (
-                        <div key={p.id} className="absolute rounded-sm opacity-80"
+                        <div key={p.id} className="absolute rounded-sm opacity-90 shadow-sm"
                             style={{
                                 left: `${p.x}vw`, top: `${p.y}vh`, width: `${p.size}px`, height: `${p.size}px`,
                                 backgroundColor: p.color,
-                                animation: `fall ${p.duration}s linear ${p.delay}s forwards`,
+                                animation: `fall ${p.duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${p.delay}s forwards`,
                             }}
                         />
                     ))}
                     <style>{`
                         @keyframes fall {
-                            to { transform: translateY(150vh) rotate(720deg); }
+                            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                            100% { transform: translateY(120vh) rotate(1080deg); opacity: 0; }
                         }
                     `}</style>
                 </div>
@@ -462,189 +816,305 @@
 
 
         // =====================================================================
-        // 5. DATOS DE LA MASTERCLASS (Contenido rico para B1)
+        // 5. MASTERCLASS DATA (13 Robust English Modules for B1 Level)
         // =====================================================================
 
         const MASTERCLASS_DATA = [
             {
                 id: 'welcome',
-                title: "Bienvenida al Escenario",
-                subtitle: "Introducción",
+                title: "Welcome to the Stage",
+                subtitle: "Introduction",
                 content: () => (
-                    <div className="text-center animate-fade-in-up">
-                        <Icons.Star size={64} className="mx-auto text-gold-500 mb-6 animate-pulse-slow" />
-                        <h2 className="text-5xl font-extrabold text-navy-900 mb-6">Eloquence & Poise</h2>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-                            Bienvenida a tu entrenamiento intensivo. Aquí aprenderás a transformar un inglés básico en un <strong className="text-navy-900">inglés sofisticado y elegante</strong> usando herramientas simples (SO/SUCH) y vocabulario de alto impacto.
+                    <div className="text-center animate-fade-in-up flex flex-col items-center">
+                        <Icons.Sparkles size={80} className="text-gold-500 mb-8 animate-float" />
+                        <h2 className="text-5xl md:text-6xl font-extrabold text-navy-900 mb-6 tracking-tight">Eloquence & Poise</h2>
+                        <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                            Welcome to your intensive stage training. Here you will learn how to transform basic English into <strong className="text-navy-900 font-bold">sophisticated and elegant speech</strong> using simple tools like SO and SUCH.
                         </p>
-                        <div className="flex justify-center gap-4">
-                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Gramática B1</span>
-                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Pronunciación</span>
-                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Simulador</span>
+                        <div className="flex flex-wrap justify-center gap-4">
+                            <span className="bg-white border border-gray-200 text-navy-900 px-5 py-3 rounded-xl font-bold flex items-center gap-3 shadow-sm hover:-translate-y-1 transition-transform"><Icons.BookOpen size={18} className="text-gold-500"/> Grammar Secrets</span>
+                            <span className="bg-white border border-gray-200 text-navy-900 px-5 py-3 rounded-xl font-bold flex items-center gap-3 shadow-sm hover:-translate-y-1 transition-transform"><Icons.Volume size={18} className="text-gold-500"/> Pronunciation</span>
+                            <span className="bg-white border border-gray-200 text-navy-900 px-5 py-3 rounded-xl font-bold flex items-center gap-3 shadow-sm hover:-translate-y-1 transition-transform"><Icons.Mic size={18} className="text-gold-500"/> Pressure Simulator</span>
                         </div>
                     </div>
                 ),
-                note: "Explica al estudiante que el objetivo de hoy no es aprender gramática complicada, sino aprender a SONAR profesional y emocional con herramientas que ya conocen (SO y SUCH)."
+                note: "Objective: Establish a premium tone. Explain to the student that the goal today is not to learn complicated B2/C1 grammar, but rather to learn how to sound highly professional using tools they already know (SO and SUCH)."
             },
             {
                 id: 'grammar-intro',
-                title: "La Fórmula de la Emoción",
-                subtitle: "Gramática Central",
+                title: "The Formula of Emotion",
+                subtitle: "Core Grammar",
                 content: () => (
-                    <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl animate-fade-in-up">
-                        <div className="bg-white rounded-3xl p-8 shadow-xl border-t-8 border-navy-900 hover:shadow-2xl transition-all">
-                            <h3 className="text-2xl font-bold text-navy-900 mb-2">Usando <span className="text-blue-600 bg-blue-50 px-2 py-1 rounded">SO</span></h3>
-                            <p className="text-gray-500 mb-6 text-sm">Para intensificar un adjetivo (sentimiento o descripción).</p>
-                            <div className="bg-gray-50 p-4 rounded-xl font-mono text-center mb-6 border border-gray-200">
-                                SO + ADJETIVO
+                    <div className="grid md:grid-cols-2 gap-8 w-full max-w-6xl animate-fade-in-up">
+                        <div className="bg-white rounded-[2rem] p-10 shadow-xl border-t-8 border-navy-900 hover:shadow-2xl transition-all relative overflow-hidden">
+                            <div className="absolute top-0 right-0 bg-navy-50 w-32 h-32 rounded-bl-full -z-0"></div>
+                            <h3 className="text-3xl font-bold text-navy-900 mb-3 relative z-10 flex items-center gap-3">
+                                <span className="text-blue-600 bg-blue-100 px-3 py-1 rounded-lg text-lg">SO</span> Intensifier
+                            </h3>
+                            <p className="text-gray-500 mb-8 text-lg relative z-10">Use "SO" when you only have a descriptive word (Adjective) to express a feeling.</p>
+                            
+                            <div className="bg-gray-50 p-6 rounded-2xl font-mono text-center mb-8 border border-gray-200 text-xl font-bold text-navy-900 shadow-inner">
+                                <span className="text-blue-600">SO</span> + ADJECTIVE
                             </div>
-                            <ul className="space-y-4">
-                                <li className="flex items-center gap-3"><TTSButton text="I am so proud." className="bg-blue-50 text-blue-600"/> "I am <Chunk type="so">so</Chunk> <Chunk type="adj">proud</Chunk>."</li>
-                                <li className="flex items-center gap-3"><TTSButton text="The stage is so beautiful." className="bg-blue-50 text-blue-600"/> "The stage is <Chunk type="so">so</Chunk> <Chunk type="adj">beautiful</Chunk>."</li>
+                            
+                            <ul className="space-y-6 relative z-10">
+                                <li className="flex items-center gap-4 text-xl">
+                                    <TTSButton text="I am so proud." className="bg-blue-50 text-blue-600 shadow-sm hover:bg-blue-600 hover:text-white"/> 
+                                    <span>"I am <Chunk type="so">so</Chunk> <Chunk type="adj">proud</Chunk>."</span>
+                                </li>
+                                <li className="flex items-center gap-4 text-xl">
+                                    <TTSButton text="The stage is so beautiful." className="bg-blue-50 text-blue-600 shadow-sm hover:bg-blue-600 hover:text-white"/> 
+                                    <span>"The stage is <Chunk type="so">so</Chunk> <Chunk type="adj">beautiful</Chunk>."</span>
+                                </li>
                             </ul>
                         </div>
-                        <div className="bg-white rounded-3xl p-8 shadow-xl border-t-8 border-gold-500 hover:shadow-2xl transition-all">
-                            <h3 className="text-2xl font-bold text-navy-900 mb-2">Usando <span className="text-orange-600 bg-orange-50 px-2 py-1 rounded">SUCH</span></h3>
-                            <p className="text-gray-500 mb-6 text-sm">Para intensificar un sustantivo (una cosa, persona o evento).</p>
-                            <div className="bg-gray-50 p-4 rounded-xl font-mono text-center mb-6 border border-gray-200">
-                                SUCH + (A/AN) + ADJ + COSA
+
+                        <div className="bg-white rounded-[2rem] p-10 shadow-xl border-t-8 border-gold-500 hover:shadow-2xl transition-all relative overflow-hidden">
+                            <div className="absolute top-0 right-0 bg-gold-50 w-32 h-32 rounded-bl-full -z-0"></div>
+                            <h3 className="text-3xl font-bold text-navy-900 mb-3 relative z-10 flex items-center gap-3">
+                                <span className="text-orange-600 bg-orange-100 px-3 py-1 rounded-lg text-lg">SUCH</span> Intensifier
+                            </h3>
+                            <p className="text-gray-500 mb-8 text-lg relative z-10">Use "SUCH" when you are talking about a specific <strong>Thing, Person, or Event</strong> (Noun).</p>
+                            
+                            <div className="bg-gray-50 p-6 rounded-2xl font-mono text-center mb-8 border border-gray-200 text-lg md:text-xl font-bold text-navy-900 shadow-inner">
+                                <span className="text-orange-600">SUCH</span> + (A/AN) + ADJ + NOUN
                             </div>
-                            <ul className="space-y-4">
-                                <li className="flex items-center gap-3"><TTSButton text="This is such an honor." className="bg-orange-50 text-orange-600"/> "This is <Chunk type="such">such</Chunk> an <Chunk type="noun">honor</Chunk>."</li>
-                                <li className="flex items-center gap-3"><TTSButton text="We have such a great team." className="bg-orange-50 text-orange-600"/> "We have <Chunk type="such">such</Chunk> a <Chunk type="adj">great</Chunk> <Chunk type="noun">team</Chunk>."</li>
+                            
+                            <ul className="space-y-6 relative z-10">
+                                <li className="flex items-center gap-4 text-xl">
+                                    <TTSButton text="This is such an honor." className="bg-orange-50 text-orange-600 shadow-sm hover:bg-orange-600 hover:text-white"/> 
+                                    <span>"This is <Chunk type="such">such</Chunk> an <Chunk type="noun">honor</Chunk>."</span>
+                                </li>
+                                <li className="flex items-center gap-4 text-xl">
+                                    <TTSButton text="We have such a great team." className="bg-orange-50 text-orange-600 shadow-sm hover:bg-orange-600 hover:text-white"/> 
+                                    <span>"We have <Chunk type="such">such</Chunk> a <Chunk type="adj">great</Chunk> <Chunk type="noun">team</Chunk>."</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 ),
-                note: "Regla de oro: Pide al estudiante que mire la última palabra de la idea. Si la última palabra es una COSA (honor, team, day, dress), automáticamente necesita SUCH. Si la última palabra es descriptiva (beautiful, happy), usa SO."
+                note: "Golden Rule for B1: Ask the student to look at the LAST word of the idea. If the last word is a THING (honor, team, day, dress), they automatically need SUCH. If the last word is descriptive (beautiful, happy, nervous), use SO."
+            },
+            {
+                id: 'grammar-expansion',
+                title: "Quantities on Stage",
+                subtitle: "Grammar Expansion",
+                content: () => (
+                    <div className="w-full max-w-5xl mx-auto animate-fade-in-up">
+                        <div className="bg-white p-10 rounded-[2rem] shadow-xl border border-gray-100 relative">
+                            <Icons.Globe className="absolute top-8 right-8 text-gold-200" size={100} />
+                            
+                            <h3 className="text-3xl font-bold text-navy-900 mb-4 relative z-10">Talking about Crowds & Support</h3>
+                            <p className="text-xl text-gray-600 mb-10 relative z-10">When you want to express a huge amount of something (like love, people, or support), we use <strong>SO MUCH</strong> and <strong>SO MANY</strong>.</p>
+                            
+                            <div className="space-y-8 relative z-10">
+                                <div className="p-6 bg-navy-50 rounded-2xl border-l-4 border-navy-900">
+                                    <h4 className="font-bold text-navy-900 mb-2 flex items-center gap-2"><Icons.User size={20}/> SO MANY + Plural Countable Nouns</h4>
+                                    <p className="text-xl italic">"There are <Chunk type="so">so</Chunk> <Chunk type="quantifier">many</Chunk> <Chunk type="noun">people</Chunk> here tonight!"</p>
+                                    <p className="text-xl italic mt-4">"I have made <Chunk type="so">so</Chunk> <Chunk type="quantifier">many</Chunk> <Chunk type="noun">friends</Chunk>."</p>
+                                </div>
+                                
+                                <div className="p-6 bg-gold-50 rounded-2xl border-l-4 border-gold-500">
+                                    <h4 className="font-bold text-navy-900 mb-2 flex items-center gap-2"><Icons.Heart size={20}/> SO MUCH + Uncountable Nouns</h4>
+                                    <p className="text-xl italic">"I feel <Chunk type="so">so</Chunk> <Chunk type="quantifier">much</Chunk> <Chunk type="noun">love</Chunk> in this room."</p>
+                                    <p className="text-xl italic mt-4">"Thank you for giving me <Chunk type="so">so</Chunk> <Chunk type="quantifier">much</Chunk> <Chunk type="noun">support</Chunk>."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ),
+                note: "Common mistake alert: B1 students often say 'I have so much friends' or 'such much love'. Practice the difference between countable (people, friends, days) and uncountable (love, support, energy)."
             },
             {
                 id: 'vocab-feelings',
-                title: "Expresando Gratitud",
-                subtitle: "Flashcards: Sentimientos",
+                title: "Expressing Gratitude",
+                subtitle: "Flashcards: Feelings",
                 content: () => (
                     <div className="w-full animate-fade-in-up">
-                        <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Toca cada tarjeta para voltearla, leer su significado y escuchar la pronunciación. Memoriza estos adjetivos para usar con <strong>SO</strong>.</p>
-                        <FlashcardDeck cards={[
-                            { term: "Grateful", def: "Agradecida desde el fondo del corazón.", example: "I am <span class='text-blue-400'>so</span> <span class='text-green-400'>grateful</span> for this opportunity.", exampleRaw: "I am so grateful for this opportunity." },
-                            { term: "Thrilled", def: "Extremadamente emocionada y feliz.", example: "We are <span class='text-blue-400'>so</span> <span class='text-green-400'>thrilled</span> to be in this city.", exampleRaw: "We are so thrilled to be in this city." },
-                            { term: "Honored", def: "Sentirse respetada y privilegiada.", example: "I feel <span class='text-blue-400'>so</span> <span class='text-green-400'>honored</span> to represent my country.", exampleRaw: "I feel so honored to represent my country." },
-                            { term: "Overwhelmed", def: "Abrumada (usualmente de buena manera, por tanto apoyo).", example: "I am <span class='text-blue-400'>so</span> <span class='text-green-400'>overwhelmed</span> by your love.", exampleRaw: "I am so overwhelmed by your love." }
+                        <p className="text-center text-xl text-gray-600 mb-10 max-w-2xl mx-auto">Tap each card to flip it, read the meaning, and listen to the pronunciation. Memorize these adjectives to use with <strong className="text-blue-600">SO</strong>.</p>
+                        <FlashcardDeck deckName="Module 4: Personal Feelings" cards={[
+                            { term: "Grateful", icon: Icons.Heart, def: "Deeply thankful from the bottom of your heart.", example: "I am <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>grateful</span> for this opportunity.", exampleRaw: "I am so grateful for this opportunity." },
+                            { term: "Thrilled", icon: Icons.Star, def: "Extremely excited, happy, and pleased.", example: "We are <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>thrilled</span> to be in this beautiful city.", exampleRaw: "We are so thrilled to be in this beautiful city." },
+                            { term: "Honored", icon: Icons.Award, def: "Feeling respected, proud, and privileged.", example: "I feel <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>honored</span> to represent my country.", exampleRaw: "I feel so honored to represent my country." },
+                            { term: "Overwhelmed", icon: Icons.Sparkles, def: "Having a strong emotional effect (usually in a good way, by too much love).", example: "I am <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>overwhelmed</span> by your love today.", exampleRaw: "I am so overwhelmed by your love today." }
                         ]} />
                     </div>
                 ),
-                note: "La palabra 'grateful' es tu salvavidas. Si alguna vez te hacen una pregunta difícil y tu mente se queda en blanco, sonríe y di: 'First of all, I am SO grateful to be here...'. Esto te da 3 segundos para pensar."
+                note: "The word 'grateful' is the ultimate lifeline. If the student ever gets a difficult question and their mind goes blank, tell them to smile and say: 'First of all, I am SO grateful to be here...'. This buys them 3 to 4 seconds to think of an answer."
             },
             {
                 id: 'vocab-events',
-                title: "Describiendo el Evento",
-                subtitle: "Flashcards: Sustantivos (Cosas)",
+                title: "Describing the Event",
+                subtitle: "Flashcards: The Setting",
                 content: () => (
                     <div className="w-full animate-fade-in-up">
-                        <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Aprende estas combinaciones elegantes para usar con <strong>SUCH</strong> cuando hables del evento o las personas.</p>
-                        <FlashcardDeck cards={[
-                            { term: "Unforgettable experience", def: "Una experiencia inolvidable.", example: "This journey has been <span class='text-orange-400'>such</span> an <span class='text-purple-400'>unforgettable experience</span>.", exampleRaw: "This journey has been such an unforgettable experience." },
-                            { term: "Incredible platform", def: "Una plataforma increíble (para alzar tu voz).", example: "This pageant is <span class='text-orange-400'>such</span> an <span class='text-purple-400'>incredible platform</span>.", exampleRaw: "This pageant is such an incredible platform." },
-                            { term: "Warm welcome", def: "Una cálida bienvenida.", example: "Thank you for <span class='text-orange-400'>such</span> a <span class='text-purple-400'>warm welcome</span>.", exampleRaw: "Thank you for such a warm welcome." }
+                        <p className="text-center text-xl text-gray-600 mb-10 max-w-2xl mx-auto">Learn these elegant combinations to use with <strong className="text-orange-600">SUCH</strong> when talking about the event, the stage, or the host city.</p>
+                        <FlashcardDeck deckName="Module 5: Nouns & Events" cards={[
+                            { term: "Unforgettable experience", icon: Icons.Globe, def: "A journey or moment you will remember forever.", example: "This has been <span class='text-orange-400 font-bold'>such</span> an <span class='text-purple-400 font-bold'>unforgettable experience</span>.", exampleRaw: "This has been such an unforgettable experience." },
+                            { term: "Incredible platform", icon: Icons.Mic, def: "A great stage or opportunity to raise your voice and help others.", example: "This pageant is <span class='text-orange-400 font-bold'>such</span> an <span class='text-purple-400 font-bold'>incredible platform</span>.", exampleRaw: "This pageant is such an incredible platform." },
+                            { term: "Warm welcome", icon: Icons.User, def: "A friendly and generous reception when arriving somewhere.", example: "Thank you for <span class='text-orange-400 font-bold'>such</span> a <span class='text-purple-400 font-bold'>warm welcome</span>.", exampleRaw: "Thank you for such a warm welcome." }
                         ]} />
                     </div>
                 ),
-                note: "Nota la pronunciación de 'unforgettable' (un-for-GET-a-ble). Asegúrate de que el estudiante acentúe la sílaba GET."
+                note: "Pronunciation check: Make sure they pronounce 'unforgettable' correctly (un-for-GET-a-ble). Ensure the stress is on the 'GET' syllable."
+            },
+            {
+                id: 'vocab-people',
+                title: "Describing Others",
+                subtitle: "Flashcards: Personalities",
+                content: () => (
+                    <div className="w-full animate-fade-in-up">
+                        <p className="text-center text-xl text-gray-600 mb-10 max-w-2xl mx-auto">When talking about your fellow candidates, judges, or directors, use these positive adjectives with <strong className="text-blue-600">SO</strong>.</p>
+                        <FlashcardDeck deckName="Module 6: People & Personality" cards={[
+                            { term: "Empowering", icon: Icons.Star, def: "Making you feel confident and strong.", example: "The women here are <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>empowering</span>.", exampleRaw: "The women here are so empowering." },
+                            { term: "Talented", icon: Icons.Award, def: "Having a natural aptitude or skill for something.", example: "Everyone in this room is <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>talented</span>.", exampleRaw: "Everyone in this room is so talented." },
+                            { term: "Welcoming", icon: Icons.Heart, def: "Friendly, making you feel invited and comfortable.", example: "The directors have been <span class='text-blue-400 font-bold'>so</span> <span class='text-green-400 font-bold'>welcoming</span> to us.", exampleRaw: "The directors have been so welcoming to us." }
+                        ]} />
+                    </div>
+                ),
+                note: "Social tip: Calling other women 'empowering' or 'talented' instead of just 'nice' or 'beautiful' elevates the B1 student's vocabulary to a much more professional and mature level."
             },
             {
                 id: 'quiz-1',
-                title: "Demuestra tu Conocimiento",
-                subtitle: "Práctica Interactiva",
+                title: "Prove Your Knowledge",
+                subtitle: "Interactive Practice",
                 content: () => (
                     <div className="w-full max-w-3xl mx-auto">
                         <QuizMCQ questions={[
                             { 
                                 text: "The judges were _____ kind to me today.", 
                                 options: ["so", "such"], ans: 0, 
-                                explanation: "'Kind' es un adjetivo (amable). No hay ninguna 'cosa' al final, por lo tanto usamos SO."
+                                explanation: "'Kind' is an adjective. There is no noun (thing) at the end of the phrase, therefore we use SO."
                             },
                             { 
                                 text: "It is _____ a pleasure to meet all of you.", 
                                 options: ["so", "such"], ans: 1, 
-                                explanation: "'Pleasure' es un sustantivo (un placer). Además tenemos el artículo 'a', lo que siempre indica SUCH."
+                                explanation: "'Pleasure' is a noun. We also have the article 'a', which is a massive clue that we MUST use SUCH."
                             },
                             { 
                                 text: "My evening gown makes me feel _____ confident.", 
                                 options: ["so", "such"], ans: 0, 
-                                explanation: "'Confident' (segura) es un sentimiento/adjetivo. Usamos SO."
+                                explanation: "'Confident' is a feeling/adjective. We use SO."
                             },
                             { 
                                 text: "We are staying in _____ a beautiful hotel.", 
                                 options: ["so", "such"], ans: 1, 
-                                explanation: "'Hotel' es una cosa (sustantivo). Usamos SUCH."
+                                explanation: "'Hotel' is a thing (Noun). We use SUCH."
+                            },
+                            {
+                                text: "Thank you for giving me _____ much support.",
+                                options: ["so", "such"], ans: 0,
+                                explanation: "With the quantifiers 'much' and 'many', we ALWAYS use SO (So much / So many)."
                             }
                         ]} />
                     </div>
                 ),
-                note: "Deja que el estudiante razone la respuesta en voz alta antes de hacer clic. Si fallan, que lean la explicación y luego repitan la oración completa en voz alta."
+                note: "Activity Flow: Let the student reason the answer out loud before clicking. If they fail, have them read the explanation and then repeat the full correct sentence out loud to build muscle memory."
             },
             {
-                id: 'advanced-that',
-                title: "Impacto y Consecuencia",
-                subtitle: "Gramática Nivel 2",
+                id: 'networking',
+                title: "Backstage Networking",
+                subtitle: "Social Skills Match",
                 content: () => (
-                    <div className="w-full max-w-4xl mx-auto animate-fade-in-up text-center">
-                        <Icons.Award size={64} className="mx-auto text-navy-900 mb-6" />
-                        <h3 className="text-2xl font-bold text-navy-900 mb-6">Agregando "THAT" para contar historias</h3>
-                        <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                            Si quieres sonar realmente avanzada, usa <strong className="text-red-500">THAT</strong> (que) después de tu frase con SO/SUCH para explicar el resultado o la consecuencia de esa emoción.
-                        </p>
-                        
-                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500 mb-6 text-left">
-                            <h4 className="font-bold text-gray-400 uppercase tracking-widest text-sm mb-4">Ejemplo 1 (SO... THAT)</h4>
-                            <p className="text-xl">"I was <Chunk type="so">so</Chunk> <Chunk type="adj">nervous</Chunk> <Chunk type="that">that</Chunk> I started crying."</p>
-                            <p className="text-sm text-gray-500 mt-2 italic">(Estaba tan nerviosa que empecé a llorar).</p>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500 text-left">
-                            <h4 className="font-bold text-gray-400 uppercase tracking-widest text-sm mb-4">Ejemplo 2 (SUCH... THAT)</h4>
-                            <p className="text-xl">"It was <Chunk type="such">such</Chunk> an <Chunk type="adj">inspiring</Chunk> <Chunk type="noun">moment</Chunk> <Chunk type="that">that</Chunk> I will never forget it."</p>
-                            <p className="text-sm text-gray-500 mt-2 italic">(Fue un momento tan inspirador que nunca lo olvidaré).</p>
+                    <div className="w-full max-w-5xl mx-auto animate-fade-in-up">
+                        <div className="bg-white p-8 md:p-12 rounded-[2rem] shadow-xl border border-gray-100">
+                            <p className="text-center text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                                At events, you will meet directors, judges, and sponsors. <br/>
+                                <strong>Click a situation on the left, then match it with the perfect polite phrase on the right.</strong>
+                            </p>
+                            <MatchingGame />
                         </div>
                     </div>
                 ),
-                note: "Este es el secreto de las buenas oradoras. No solo dicen que algo fue bonito, explican el IMPACTO que tuvo en ellas. Practiquen completar frases: 'I am so happy that... (I can't stop smiling)'."
+                note: "B1 students often struggle with 'small talk' and freeze up. Memorizing 'It's such a pleasure to meet you' is the perfect, foolproof icebreaker for any VIP encounter."
             },
             {
-                id: 'magic-pause',
-                title: "La Pausa Mágica",
-                subtitle: "Técnica de Oratoria",
+                id: 'advanced-that',
+                title: "Impact and Consequence",
+                subtitle: "Advanced Grammar",
                 content: () => (
-                    <div className="w-full max-w-4xl mx-auto animate-fade-in-up flex flex-col items-center">
-                        <div className="bg-navy-900 text-white p-12 rounded-[2.5rem] w-full shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500 rounded-full opacity-20 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                    <div className="w-full max-w-5xl mx-auto animate-fade-in-up">
+                        <div className="glass-panel p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden border-t-8 border-navy-900">
+                            <div className="absolute top-0 left-0 w-64 h-64 bg-navy-100 rounded-full opacity-50 blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
                             
-                            <h3 className="text-3xl font-bold mb-6 flex items-center gap-4 text-gold-500">
-                                <Icons.Mic className="animate-pulse" /> Actuación de Voz
-                            </h3>
-                            <p className="text-xl mb-10 font-light leading-relaxed">
-                                Nunca hables como un robot. Las reinas de belleza y presentadores hacen una <strong className="text-gold-500 font-bold">micro-pausa</strong> antes de la palabra importante para crear drama y mostrar sinceridad.
+                            <h3 className="text-3xl md:text-4xl font-extrabold text-navy-900 mb-6 relative z-10">Adding "THAT" for Storytelling</h3>
+                            <p className="text-xl text-gray-700 mb-12 leading-relaxed relative z-10">
+                                If you want to sound highly advanced and fluent, use <strong className="text-red-600 bg-red-50 px-2 py-1 rounded">THAT</strong> after your SO/SUCH phrase to explain the <strong>result</strong> or <strong>impact</strong> of your emotion.
                             </p>
                             
-                            <div className="space-y-6">
-                                <div className="bg-white/10 p-6 rounded-2xl flex items-center gap-6 border border-white/20 hover:bg-white/20 transition-all cursor-pointer group">
-                                    <TTSButton text="I am... so proud of my team." className="bg-gold-500 text-navy-900 group-hover:scale-110" />
-                                    <span className="text-2xl font-light">"I am <span className="opacity-40">...</span> <strong className="text-gold-500 text-3xl">SO</strong> proud of my team."</span>
+                            <div className="grid md:grid-cols-2 gap-8 relative z-10">
+                                <div className="bg-white p-8 rounded-2xl shadow-md border-l-4 border-red-500 transform hover:-translate-y-1 transition-transform">
+                                    <h4 className="font-bold text-gray-400 uppercase tracking-widest text-xs mb-4">Structure 1: SO ... THAT</h4>
+                                    <p className="text-2xl font-light text-navy-900 mb-4 leading-normal">
+                                        "I was <Chunk type="so">so</Chunk> <Chunk type="adj">nervous</Chunk> <br className="hidden md:block"/><Chunk type="that">that</Chunk> I started crying."
+                                    </p>
+                                    <p className="text-sm text-gray-500 italic mt-auto border-t border-gray-100 pt-4">Meaning: Estaba tan nerviosa que empecé a llorar.</p>
                                 </div>
-                                <div className="bg-white/10 p-6 rounded-2xl flex items-center gap-6 border border-white/20 hover:bg-white/20 transition-all cursor-pointer group">
-                                    <TTSButton text="This is... such a beautiful dress." className="bg-gold-500 text-navy-900 group-hover:scale-110" />
-                                    <span className="text-2xl font-light">"This is <span className="opacity-40">...</span> <strong className="text-gold-500 text-3xl">SUCH</strong> a beautiful dress."</span>
+
+                                <div className="bg-white p-8 rounded-2xl shadow-md border-l-4 border-red-500 transform hover:-translate-y-1 transition-transform">
+                                    <h4 className="font-bold text-gray-400 uppercase tracking-widest text-xs mb-4">Structure 2: SUCH ... THAT</h4>
+                                    <p className="text-2xl font-light text-navy-900 mb-4 leading-normal">
+                                        "It was <Chunk type="such">such</Chunk> an <Chunk type="adj">inspiring</Chunk> <Chunk type="noun">moment</Chunk> <Chunk type="that">that</Chunk> I will never forget it."
+                                    </p>
+                                    <p className="text-sm text-gray-500 italic mt-auto border-t border-gray-100 pt-4">Meaning: Fue un momento tan inspirador que nunca lo olvidaré.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 ),
-                note: "Ejercicio físico: Haz que el estudiante ponga la mano en su corazón al momento de hacer la pausa. La pausa física del cuerpo ayuda a hacer la pausa de la voz."
+                note: "This is the secret weapon of great public speakers. They don't just say something was beautiful; they explain the IMPACT it had on them. Practice out loud: Teacher says 'I am so happy...', Student finishes with '...THAT I can't stop smiling!'."
+            },
+            {
+                id: 'fill-blanks',
+                title: "The Final Polish",
+                subtitle: "Contextual Practice",
+                content: () => (
+                    <div className="w-full max-w-4xl mx-auto">
+                        <FillInTheBlanks sentences={[
+                            "Standing here today is {such} an incredible honor.",
+                            "I have met {so} many talented women this week.",
+                            "My family has given me {so} much love.",
+                            "This has been {such} a transformative journey {that} I feel like a new person."
+                        ]} />
+                    </div>
+                ),
+                note: "Have the student type 'so' or 'such' into the blanks. Remind them to look at the words immediately following the blank to find the clues (noun vs adjective vs quantifier)."
+            },
+            {
+                id: 'magic-pause',
+                title: "The Magic Pause",
+                subtitle: "Oratory Technique",
+                content: () => (
+                    <div className="w-full max-w-5xl mx-auto animate-fade-in-up flex flex-col items-center">
+                        <div className="glass-panel-dark text-white p-10 md:p-16 rounded-[3rem] w-full shadow-2xl relative overflow-hidden border-t-8 border-gold-500">
+                            <div className="absolute bottom-0 right-0 w-80 h-80 bg-gold-500 rounded-full opacity-10 blur-3xl translate-x-1/3 translate-y-1/3"></div>
+                            
+                            <h3 className="text-3xl md:text-4xl font-extrabold mb-6 flex items-center gap-4 text-gold-500">
+                                <Icons.Star className="animate-spin-slow" size={36} /> Voice Acting
+                            </h3>
+                            <p className="text-xl md:text-2xl mb-12 font-light leading-relaxed text-gray-300">
+                                Never speak like a robot memorizing lines. Professional speakers insert a <strong className="text-gold-500 font-bold bg-gold-900/40 px-2 rounded">micro-pause</strong> right before the important word to create drama and show true sincerity.
+                            </p>
+                            
+                            <div className="space-y-6 relative z-10">
+                                <div className="bg-white/5 p-6 md:p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center gap-6 border border-white/10 hover:bg-white/10 hover:border-gold-500/50 transition-all cursor-pointer group">
+                                    <TTSButton text="I am... so proud of my team." className="bg-gold-500 text-navy-900 group-hover:scale-110 shadow-lg" />
+                                    <span className="text-3xl font-light">"I am <span className="opacity-30 tracking-widest text-gold-500 font-bold"> . . . </span> <strong className="text-gold-500 text-4xl font-extrabold tracking-tight">SO</strong> proud."</span>
+                                </div>
+                                <div className="bg-white/5 p-6 md:p-8 rounded-3xl flex flex-col md:flex-row items-start md:items-center gap-6 border border-white/10 hover:bg-white/10 hover:border-gold-500/50 transition-all cursor-pointer group">
+                                    <TTSButton text="This is... such a beautiful dress." className="bg-gold-500 text-navy-900 group-hover:scale-110 shadow-lg" />
+                                    <span className="text-3xl font-light">"This is <span className="opacity-30 tracking-widest text-gold-500 font-bold"> . . . </span> <strong className="text-gold-500 text-4xl font-extrabold tracking-tight">SUCH</strong> an honor."</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ),
+                note: "Physical Exercise: Make the student put their hand on their chest/heart exactly when they make the pause. Tying a physical movement to the sentence naturally forces the vocal pause."
             },
             {
                 id: 'speech-sim',
-                title: "Simulador Bajo Presión",
-                subtitle: "Práctica Final",
+                title: "Under Pressure",
+                subtitle: "Final Practice",
                 content: () => (
                     <div className="w-full animate-fade-in-up">
                         <SpeechSimulator prompts={[
@@ -656,37 +1126,40 @@
                         ]} />
                     </div>
                 ),
-                note: "Instrucciones: El estudiante no puede escribir nada. Debe leer la pregunta, presionar comenzar, y usar al menos un SO o SUCH en su respuesta de 45 segundos. Si se equivocan, ¡que sigan hablando! No se permiten disculpas en el escenario."
+                note: "Instructions: The student CANNOT write anything down. They must read the question, press start, and use at least ONE 'so' or 'such' structure in their 45-second answer. If they make a mistake, they must keep talking! Apologies are not allowed on stage."
             },
             {
                 id: 'graduation',
-                title: "Masterclass Completada",
-                subtitle: "Certificación",
+                title: "Masterclass Completed",
+                subtitle: "Certification",
                 content: () => (
-                    <div className="text-center animate-fade-in-up bg-white p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden max-w-2xl mx-auto">
+                    <div className="text-center animate-fade-in-up bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl border border-gray-100 relative overflow-hidden max-w-3xl mx-auto">
                         <Confetti />
                         <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-gold-300 via-gold-500 to-navy-900"></div>
-                        <Icons.Award size={80} className="mx-auto text-gold-500 mb-6" />
-                        <h2 className="text-4xl font-extrabold text-navy-900 mb-4">¡Felicidades!</h2>
-                        <p className="text-lg text-gray-600 mb-8">Has dominado el uso de la intensidad emocional en inglés.</p>
+                        <Icons.Award size={100} className="mx-auto text-gold-500 mb-8 animate-bounce-slight" />
                         
-                        <div className="bg-gray-50 p-6 rounded-xl text-left border border-gray-200">
-                            <h4 className="font-bold text-navy-900 mb-4 uppercase text-sm tracking-widest">Tu Kit de Supervivencia:</h4>
-                            <ul className="space-y-3 text-gray-700 font-medium">
-                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> SO + Sentimiento ("So grateful")</li>
-                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> SUCH + Cosa ("Such an honor")</li>
-                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> La Pausa Mágica para sonar sincera</li>
-                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> Cláusula "THAT" para explicar impacto</li>
+                        <h2 className="text-5xl font-extrabold text-navy-900 mb-4 tracking-tight">Congratulations!</h2>
+                        <p className="text-2xl text-gray-600 mb-10 font-light">You have mastered the art of emotional intensity in English.</p>
+                        
+                        <div className="bg-navy-50 p-8 rounded-3xl text-left border border-navy-100 shadow-inner">
+                            <h4 className="font-bold text-navy-900 mb-6 uppercase text-sm tracking-widest flex items-center gap-2">
+                                <Icons.BookOpen size={18}/> Your Survival Kit
+                            </h4>
+                            <ul className="space-y-4 text-gray-800 text-lg font-medium">
+                                <li className="flex items-center gap-3"><span className="p-1 bg-green-200 text-green-700 rounded-full"><Icons.Check size={16}/></span> <strong className="text-navy-900">SO</strong> + Feeling <em>("So grateful")</em></li>
+                                <li className="flex items-center gap-3"><span className="p-1 bg-green-200 text-green-700 rounded-full"><Icons.Check size={16}/></span> <strong className="text-navy-900">SUCH</strong> + Thing <em>("Such an honor")</em></li>
+                                <li className="flex items-center gap-3"><span className="p-1 bg-green-200 text-green-700 rounded-full"><Icons.Check size={16}/></span> The <strong className="text-navy-900">Magic Pause</strong> to sound sincere</li>
+                                <li className="flex items-center gap-3"><span className="p-1 bg-green-200 text-green-700 rounded-full"><Icons.Check size={16}/></span> <strong className="text-navy-900">THAT</strong> clause to explain your impact</li>
                             </ul>
                         </div>
                     </div>
                 ),
-                note: "Elogia al estudiante. Tarea: Ver 3 entrevistas de certámenes en YouTube y detectar cuántas veces dicen 'So' o 'Such'."
+                note: "Praise the student's effort. Homework Assignment: Watch 3 international pageant interviews (Miss Universe, Miss World) on YouTube and write down every time a candidate uses 'So', 'Such', 'So much', or 'So many'."
             }
         ];
 
         // =====================================================================
-        // 6. APLICACIÓN PRINCIPAL (Layout y Estado)
+        // 6. MAIN APPLICATION SHELL (Layout, State, Routing)
         // =====================================================================
 
         const App = () => {
@@ -695,9 +1168,9 @@
             const [showMenu, setShowMenu] = useState(false);
             const [maxUnlocked, setMaxUnlocked] = useState(0);
 
-            // Cargar progreso
+            // Load progress from localStorage
             useEffect(() => {
-                const saved = localStorage.getItem('masterclassProgress');
+                const saved = localStorage.getItem('masterclassProgressB1');
                 if (saved) {
                     const parsed = parseInt(saved, 10);
                     setMaxUnlocked(parsed);
@@ -705,16 +1178,27 @@
                 }
             }, []);
 
-            // Guardar progreso
+            // Save progress to localStorage
             useEffect(() => {
                 if (currentSlide > maxUnlocked) {
                     setMaxUnlocked(currentSlide);
-                    localStorage.setItem('masterclassProgress', currentSlide);
+                    localStorage.setItem('masterclassProgressB1', currentSlide);
                 }
             }, [currentSlide, maxUnlocked]);
 
+            // Keyboard Navigation
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.key === 'ArrowRight' && currentSlide < MASTERCLASS_DATA.length - 1) nextSlide();
+                    if (e.key === 'ArrowLeft' && currentSlide > 0) prevSlide();
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [currentSlide]);
+
             const nextSlide = () => setCurrentSlide(p => Math.min(p + 1, MASTERCLASS_DATA.length - 1));
             const prevSlide = () => setCurrentSlide(p => Math.max(p - 1, 0));
+            
             const goToSlide = (idx) => {
                 setCurrentSlide(idx);
                 setShowMenu(false);
@@ -725,123 +1209,157 @@
             return (
                 <div className="min-h-screen flex flex-col font-sans overflow-hidden bg-[#F8F9FA] text-gray-800">
                     
-                    {/* ENCABEZADO */}
-                    <header className="bg-navy-900 text-white h-16 flex items-center justify-between px-4 md:px-8 shadow-md relative z-30">
+                    {/* HEADER */}
+                    <header className="bg-navy-900 text-white h-[72px] flex items-center justify-between px-4 md:px-8 shadow-md relative z-40">
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setShowMenu(!showMenu)} className="p-2 hover:bg-navy-800 rounded-lg transition-colors">
-                                <Icons.Menu />
+                            <button onClick={() => setShowMenu(!showMenu)} className="p-2 hover:bg-navy-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gold-500">
+                                {showMenu ? <Icons.X size={26} /> : <Icons.Menu size={26} />}
                             </button>
-                            <h1 className="font-semibold text-lg hidden md:block text-gold-500">Masterclass Premium</h1>
+                            <div className="flex items-center gap-2">
+                                <Icons.Star className="text-gold-500 hidden sm:block" size={20}/>
+                                <h1 className="font-bold text-lg tracking-wide hidden md:block text-white">English Stage Masterclass</h1>
+                            </div>
                         </div>
                         
-                        {/* Barra de Progreso Global */}
-                        <div className="flex-1 max-w-md mx-8">
-                            <div className="bg-navy-800 h-2 rounded-full overflow-hidden">
+                        {/* Global Progress Bar */}
+                        <div className="flex-1 max-w-xl mx-8">
+                            <div className="bg-navy-800 h-2.5 rounded-full overflow-hidden shadow-inner">
                                 <div 
-                                    className="bg-gold-500 h-full transition-all duration-700 ease-out"
+                                    className="bg-gradient-to-r from-gold-600 to-gold-400 h-full transition-all duration-700 ease-out relative"
                                     style={{ width: `${((currentSlide + 1) / MASTERCLASS_DATA.length) * 100}%` }}
-                                ></div>
+                                >
+                                    <div className="absolute top-0 right-0 bottom-0 left-0 bg-white/20 animate-pulse-slow"></div>
+                                </div>
                             </div>
                         </div>
 
                         <button 
                             onClick={() => setShowNotes(!showNotes)}
-                            className={`px-4 py-2 text-sm font-bold rounded-lg transition-all border ${showNotes ? 'bg-gold-500 text-navy-900 border-gold-500' : 'text-gold-500 border-gold-500 hover:bg-gold-500/10'}`}
+                            className={`px-5 py-2.5 text-sm font-bold rounded-xl transition-all border-2 flex items-center gap-2 ${showNotes ? 'bg-gold-500 text-navy-900 border-gold-500 shadow-md' : 'text-gold-500 border-gold-500 hover:bg-gold-500/10'}`}
                         >
-                            {showNotes ? 'Ocultar Notas' : 'Notas Docente'}
+                            <Icons.BookOpen size={18} className={showNotes ? "text-navy-900" : "text-gold-500"} />
+                            <span className="hidden sm:inline">{showNotes ? 'Hide Notes' : 'Teacher Notes'}</span>
                         </button>
                     </header>
 
-                    {/* CUERPO PRINCIPAL */}
+                    {/* MAIN BODY */}
                     <div className="flex flex-1 relative overflow-hidden">
                         
-                        {/* Drawer del Menú */}
-                        <div className={`absolute top-0 left-0 h-full w-72 bg-white shadow-2xl z-20 transition-transform duration-300 transform ${showMenu ? 'translate-x-0' : '-translate-x-full'}`}>
-                            <div className="p-6 h-full overflow-y-auto">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Contenido del Curso</h3>
-                                <div className="space-y-2">
-                                    {MASTERCLASS_DATA.map((item, idx) => (
-                                        <button 
-                                            key={item.id}
-                                            onClick={() => goToSlide(idx)}
-                                            disabled={idx > maxUnlocked}
-                                            className={`w-full text-left p-3 rounded-lg text-sm transition-colors flex items-center justify-between
-                                                ${currentSlide === idx ? 'bg-navy-50 text-navy-900 font-bold border-l-4 border-navy-900' : 
-                                                  idx > maxUnlocked ? 'opacity-40 cursor-not-allowed text-gray-500' : 'hover:bg-gray-50 text-gray-700'}`}
-                                        >
-                                            <span className="truncate">{idx + 1}. {item.title}</span>
-                                            {idx < maxUnlocked && currentSlide !== idx && <Icons.Check size={14} className="text-green-500"/>}
-                                        </button>
-                                    ))}
+                        {/* Navigation Drawer Menu */}
+                        <div className={`absolute top-0 left-0 h-full w-80 bg-white shadow-2xl z-30 transition-transform duration-300 ease-in-out transform flex flex-col ${showMenu ? 'translate-x-0' : '-translate-x-full'}`}>
+                            <div className="p-6 h-full overflow-y-auto bg-gray-50 border-r border-gray-200">
+                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <Icons.Menu size={16}/> Course Modules
+                                </h3>
+                                <div className="space-y-3">
+                                    {MASTERCLASS_DATA.map((item, idx) => {
+                                        const isLocked = idx > maxUnlocked;
+                                        const isActive = currentSlide === idx;
+                                        return (
+                                            <button 
+                                                key={item.id}
+                                                onClick={() => goToSlide(idx)}
+                                                disabled={isLocked}
+                                                className={`w-full text-left p-4 rounded-xl text-sm transition-all duration-200 flex items-center gap-3
+                                                    ${isActive ? 'bg-navy-900 text-white font-bold shadow-md transform scale-[1.02]' : 
+                                                    isLocked ? 'opacity-50 cursor-not-allowed text-gray-400 bg-gray-100 border border-gray-200' : 'hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm text-navy-800'}`}
+                                            >
+                                                <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold flex-shrink-0 ${isActive ? 'bg-gold-500 text-navy-900' : isLocked ? 'bg-gray-200 text-gray-500' : 'bg-navy-100 text-navy-900'}`}>
+                                                    {isLocked ? <Icons.Lock size={12}/> : idx + 1}
+                                                </div>
+                                                <span className="truncate flex-1">{item.title}</span>
+                                                {!isLocked && !isActive && <Icons.Check size={16} className="text-green-500 flex-shrink-0 opacity-50"/>}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Área de la Diapositiva */}
-                        <main className="flex-1 overflow-y-auto relative bg-dot-pattern">
-                            {/* Patrón de fondo sutil */}
-                            <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#0A192F 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-                            
-                            <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 min-h-full flex flex-col justify-center relative z-10">
+                        {/* Overlay to close menu */}
+                        {showMenu && (
+                            <div 
+                                className="absolute inset-0 bg-navy-900/20 backdrop-blur-sm z-20"
+                                onClick={() => setShowMenu(false)}
+                            ></div>
+                        )}
+
+                        {/* Slide Content Area */}
+                        <main className="flex-1 overflow-y-auto relative bg-dot-pattern scroll-smooth">
+                            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 md:py-20 min-h-full flex flex-col justify-center relative z-10">
                                 
                                 <div className="text-center mb-16 animate-fade-in-down">
-                                    <span className="inline-block px-4 py-1 rounded-full bg-gold-100 text-gold-700 font-bold tracking-[0.2em] uppercase text-xs mb-4 shadow-sm border border-gold-300">
-                                        Módulo {currentSlide + 1} • {slide.subtitle}
+                                    <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gold-50 text-gold-700 font-bold tracking-[0.2em] uppercase text-xs mb-6 shadow-sm border border-gold-200">
+                                        Module {currentSlide + 1} <span className="text-gold-300">•</span> {slide.subtitle}
                                     </span>
-                                    <h2 className="text-4xl md:text-5xl font-extrabold text-navy-900">{slide.title}</h2>
+                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy-900 tracking-tight leading-tight px-4">
+                                        {slide.title}
+                                    </h2>
                                 </div>
                                 
-                                <div className="flex justify-center w-full pb-20">
+                                <div className="flex justify-center w-full pb-24">
                                     {slide.content()}
                                 </div>
                             </div>
                         </main>
 
-                        {/* Panel de Notas del Profesor */}
-                        <aside className={`w-80 bg-white border-l border-gray-200 shadow-[-10px_0_30px_rgba(0,0,0,0.05)] z-10 transition-transform duration-300 absolute right-0 h-full ${showNotes ? 'translate-x-0' : 'translate-x-full'}`}>
-                            <div className="p-6 h-full flex flex-col">
-                                <h3 className="text-lg font-bold text-navy-900 border-b-2 border-gold-500 pb-4 mb-6 flex items-center gap-2">
-                                    Guía Pedagógica
+                        {/* Teacher Notes Sidebar Panel */}
+                        <aside className={`w-80 md:w-96 bg-white border-l border-gray-200 shadow-[-10px_0_30px_rgba(0,0,0,0.05)] z-20 transition-transform duration-300 ease-in-out absolute right-0 h-full ${showNotes ? 'translate-x-0' : 'translate-x-full'}`}>
+                            <div className="p-8 h-full flex flex-col bg-gray-50">
+                                <h3 className="text-xl font-extrabold text-navy-900 border-b-2 border-gold-500 pb-4 mb-8 flex items-center gap-3">
+                                    <Icons.Lightbulb className="text-gold-500" /> Pedagogical Guide
                                 </h3>
-                                <div className="bg-gold-100/50 p-5 rounded-xl border-l-4 border-gold-500 text-gray-700 text-sm leading-relaxed flex-1">
-                                    <span className="block font-bold text-gold-700 mb-3 uppercase tracking-wider text-xs flex items-center gap-2">
-                                        <Icons.Star size={14}/> Para esta diapositiva:
+                                
+                                <div className="bg-white p-6 rounded-2xl border border-gold-200 shadow-sm text-gray-700 text-sm leading-relaxed flex-1 overflow-y-auto relative">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-gold-500 rounded-l-2xl"></div>
+                                    <span className="block font-bold text-gold-700 mb-4 uppercase tracking-widest text-xs flex items-center gap-2">
+                                        <Icons.Star size={14}/> Slide Instructions:
                                     </span>
-                                    {slide.note}
+                                    <p className="text-base text-navy-800 leading-loose">
+                                        {slide.note}
+                                    </p>
+                                </div>
+                                
+                                <div className="mt-6 text-center text-xs text-gray-400 font-medium uppercase tracking-widest">
+                                    Slide {currentSlide + 1} of {MASTERCLASS_DATA.length}
                                 </div>
                             </div>
                         </aside>
 
                     </div>
 
-                    {/* PIE DE PÁGINA / CONTROLES */}
-                    <footer className="bg-white border-t border-gray-200 h-20 px-4 md:px-8 flex justify-between items-center z-30 shadow-[0_-5px_20px_rgba(0,0,0,0.03)] relative">
+                    {/* BOTTOM NAVIGATION BAR */}
+                    <footer className="bg-white border-t border-gray-200 h-24 px-6 md:px-12 flex justify-between items-center z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.03)] relative">
                         <Button 
                             onClick={prevSlide}
                             disabled={currentSlide === 0}
                             variant="ghost"
-                            className="text-gray-600 border border-gray-200 bg-white"
-                            icon={null} // Sobrescribir para poner ícono a la izquierda
+                            className="text-gray-500 border-2 border-gray-200 bg-white hover:border-navy-900 hover:text-navy-900 px-4 md:px-8 py-4"
+                            icon={null} 
                         >
-                            <Icons.ChevronLeft size={20} /> <span className="hidden md:inline">Anterior</span>
+                            <Icons.ChevronLeft size={24} /> <span className="hidden md:inline text-lg font-bold">Previous</span>
                         </Button>
                         
-                        <div className="text-gray-400 font-bold tracking-wider text-sm hidden sm:block">
-                            {currentSlide + 1} / {MASTERCLASS_DATA.length}
+                        <div className="flex gap-2 hidden lg:flex">
+                            {MASTERCLASS_DATA.map((_, idx) => (
+                                <div key={idx} className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-8 bg-gold-500' : idx < maxUnlocked ? 'w-2.5 bg-navy-200' : 'w-2.5 bg-gray-200'}`}></div>
+                            ))}
                         </div>
 
                         <Button 
                             onClick={nextSlide}
                             disabled={currentSlide === MASTERCLASS_DATA.length - 1}
                             variant="primary"
+                            className="px-6 md:px-10 py-4 text-lg"
                         >
-                            <span className="hidden md:inline">Continuar</span> <Icons.ChevronRight size={20} />
+                            <span className="hidden md:inline">Continue</span> <Icons.ChevronRight size={24} />
                         </Button>
                     </footer>
                 </div>
             );
         };
 
+        // Render application to DOM
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
