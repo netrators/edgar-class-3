@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterclass Premium: English B1 for Stage & Social</title>
+    
+    <!-- Tailwind CSS (Script CDN para configuración avanzada) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 50: '#e6e9ef', 100: '#b0b9cb', 500: '#2a4365', 800: '#112240', 900: '#0A192F' },
+                        gold: { 100: '#f9f6f0', 300: '#e6d5b8', 500: '#C5A880', 700: '#9b8464' }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in-down': 'fadeInDown 0.5s ease-out forwards',
+                        'shake': 'shake 0.4s ease-in-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-6px)' },
+                            '75%': { transform: 'translateX(6px)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- React & ReactDOM (Producción) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (Para compilar JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* Estilos base y utilidades complejas que Tailwind CDN no maneja bien en línea */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; }
+        
+        /* Perspectiva para Flashcards 3D */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        /* Scrollbar elegante */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #C5A880; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9b8464; }
+
+        /* Timer Circular SVG */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+        // =====================================================================
+        // 1. SISTEMA DE AUDIO (Sintetizador + TTS)
+        // =====================================================================
+        
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const playSound = (type) => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1); // C6
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'tick') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.05);
+            }
+        };
+
+        const speakText = (text) => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85; // Velocidad ideal para B1
+                
+                const voices = window.speechSynthesis.getVoices();
+                // Buscar voz femenina de US o UK, o la primera en inglés
+                const englishVoice = voices.find(v => v.lang.includes('en-US') && v.name.includes('Female')) 
+                                  || voices.find(v => v.lang.includes('en'));
+                if (englishVoice) utterance.voice = englishVoice;
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+
+        // =====================================================================
+        // 2. LIBRERÍA DE ICONOS SVG (Sin dependencias externas)
+        // =====================================================================
+
+        const Icons = {
+            Volume: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>,
+            Check: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12"></polyline></svg>,
+            X: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
+            Menu: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>,
+            Mic: ({ size=24, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x1="12" y1="19" y2="22"></line></svg>,
+            ChevronRight: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>,
+            ChevronLeft: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="15 18 9 12 15 6"></polyline></svg>,
+            Star: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
+            Refresh: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>,
+            Play: ({ size=20, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>,
+            Award: ({ size=40, className="" }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        };
+
+        // =====================================================================
+        // 3. COMPONENTES UI REUTILIZABLES
+        // =====================================================================
+
+        const TTSButton = ({ text, className="" }) => (
+            <button 
+                onClick={(e) => { e.stopPropagation(); speakText(text); }}
+                className={`p-2 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 ${className}`}
+                title="Escuchar pronunciación"
+            >
+                <Icons.Volume size={18} />
+            </button>
+        );
+
+        const Chunk = ({ type, children }) => {
+            const styles = {
+                so: "bg-blue-100 text-blue-800 border-blue-200",
+                such: "bg-orange-100 text-orange-800 border-orange-200",
+                adj: "bg-green-100 text-green-800 border-green-200",
+                noun: "bg-purple-100 text-purple-800 border-purple-200",
+                that: "bg-red-100 text-red-800 border-red-200"
+            };
+            return (
+                <span className={`inline-block px-2 py-1 mx-1 rounded-md font-semibold border ${styles[type]} shadow-sm transition-transform hover:-translate-y-1`}>
+                    {children}
+                </span>
+            );
+        };
+
+        const Button = ({ children, onClick, disabled, variant='primary', className="", icon: Icon }) => {
+            const base = "flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-md active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
+            const variants = {
+                primary: "bg-navy-900 text-white hover:bg-navy-800 hover:shadow-lg",
+                secondary: "bg-gold-500 text-navy-900 hover:bg-gold-300 hover:shadow-lg",
+                outline: "border-2 border-navy-900 text-navy-900 hover:bg-navy-50",
+                ghost: "bg-transparent text-gray-500 shadow-none hover:bg-gray-100"
+            };
+            return (
+                <button onClick={onClick} disabled={disabled} className={`${base} ${variants[variant]} ${className}`}>
+                    {children}
+                    {Icon && <Icon size={20} />}
+                </button>
+            );
+        };
+
+        // =====================================================================
+        // 4. COMPONENTES INTERACTIVOS AVANZADOS
+        // =====================================================================
+
+        // 4.1 Flashcards 3D
+        const FlashcardDeck = ({ cards }) => {
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [isFlipped, setIsFlipped] = useState(false);
+
+            const nextCard = () => { setIsFlipped(false); setTimeout(() => setCurrentIndex(p => (p + 1) % cards.length), 150); };
+            const prevCard = () => { setIsFlipped(false); setTimeout(() => setCurrentIndex(p => (p === 0 ? cards.length - 1 : p - 1)), 150); };
+
+            const card = cards[currentIndex];
+
+            return (
+                <div className="w-full max-w-md mx-auto flex flex-col items-center">
+                    <div className="text-gray-400 font-medium mb-4 tracking-widest text-sm uppercase">Tarjeta {currentIndex + 1} de {cards.length}</div>
+                    
+                    <div 
+                        className="relative w-full h-80 perspective-1000 cursor-pointer group"
+                        onClick={() => setIsFlipped(!isFlipped)}
+                    >
+                        <div className={`w-full h-full absolute transition-all duration-700 transform-style-3d shadow-2xl rounded-2xl ${isFlipped ? 'rotate-y-180' : ''}`}>
+                            
+                            {/* Frente (Inglés) */}
+                            <div className="absolute w-full h-full backface-hidden bg-white rounded-2xl border-b-8 border-navy-900 flex flex-col items-center justify-center p-8 text-center">
+                                <TTSButton text={card.term} className="absolute top-4 right-4 bg-navy-50 text-navy-900" />
+                                <h3 className="text-4xl font-extrabold text-navy-900 mb-2">{card.term}</h3>
+                                <p className="text-gray-400 text-sm mt-4 italic">Toca para ver el significado</p>
+                            </div>
+
+                            {/* Reverso (Español & Ejemplo) */}
+                            <div className="absolute w-full h-full backface-hidden bg-navy-900 rounded-2xl rotate-y-180 flex flex-col items-center justify-center p-8 text-center text-white border-b-8 border-gold-500">
+                                <h4 className="text-gold-500 font-bold uppercase tracking-wider mb-2 text-sm">Significado</h4>
+                                <p className="text-xl mb-6">{card.def}</p>
+                                <div className="bg-white/10 p-4 rounded-xl w-full">
+                                    <h4 className="text-gold-300 font-semibold text-xs mb-2">EJEMPLO</h4>
+                                    <p className="italic text-gray-200" dangerouslySetInnerHTML={{ __html: card.example }}></p>
+                                    <TTSButton text={card.exampleRaw} className="mt-2 text-gold-500 hover:bg-gold-500 hover:text-navy-900 bg-white/5" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4 mt-8">
+                        <Button variant="outline" onClick={prevCard} icon={Icons.ChevronLeft} className="w-16 h-16 p-0 rounded-full justify-center"></Button>
+                        <Button variant="outline" onClick={nextCard} className="w-16 h-16 p-0 rounded-full justify-center"><Icons.ChevronRight size={20} /></Button>
+                    </div>
+                </div>
+            );
+        };
+
+        // 4.2 Cuestionario Dinámico (MCQ)
+        const QuizMCQ = ({ questions }) => {
+            const [currentQ, setCurrentQ] = useState(0);
+            const [selected, setSelected] = useState(null);
+            const [showExplanation, setShowExplanation] = useState(false);
+            const [score, setScore] = useState(0);
+            const [isFinished, setIsFinished] = useState(false);
+
+            const handleAnswer = (index) => {
+                if (selected !== null) return;
+                setSelected(index);
+                const isCorrect = index === questions[currentQ].ans;
+                
+                if (isCorrect) {
+                    playSound('correct');
+                    setScore(s => s + 1);
+                } else {
+                    playSound('wrong');
+                }
+                setShowExplanation(true);
+            };
+
+            const nextQuestion = () => {
+                if (currentQ < questions.length - 1) {
+                    setCurrentQ(c => c + 1);
+                    setSelected(null);
+                    setShowExplanation(false);
+                } else {
+                    setIsFinished(true);
+                }
+            };
+
+            const reset = () => {
+                setCurrentQ(0); setSelected(null); setShowExplanation(false); setScore(0); setIsFinished(false);
+            };
+
+            if (isFinished) {
+                return (
+                    <div className="bg-white p-10 rounded-2xl shadow-xl text-center border-t-8 border-gold-500 animate-fade-in-up">
+                        <Icons.Award size={64} className="mx-auto text-gold-500 mb-6 animate-pulse-slow" />
+                        <h3 className="text-3xl font-bold text-navy-900 mb-2">¡Completado!</h3>
+                        <p className="text-xl text-gray-600 mb-8">Puntuación: <strong className="text-navy-900">{score} / {questions.length}</strong></p>
+                        <Button onClick={reset} variant="primary" className="mx-auto" icon={Icons.Refresh}>Intentar de nuevo</Button>
+                    </div>
+                );
+            }
+
+            const q = questions[currentQ];
+
+            return (
+                <div className="bg-white p-8 rounded-2xl shadow-xl animate-fade-in-up border border-gray-100">
+                    <div className="flex justify-between items-center mb-6 text-sm font-bold text-gray-400">
+                        <span>Pregunta {currentQ + 1} de {questions.length}</span>
+                        <span>Puntuación: {score}</span>
+                    </div>
+                    
+                    <h3 className="text-2xl font-semibold text-navy-900 mb-8">{q.text}</h3>
+                    
+                    <div className="space-y-4">
+                        {q.options.map((opt, idx) => {
+                            const isSelected = selected === idx;
+                            const isCorrect = q.ans === idx;
+                            const showStatus = selected !== null;
+                            
+                            let btnClass = "w-full p-4 rounded-xl border-2 text-left font-medium text-lg flex items-center justify-between transition-all duration-300 ";
+                            
+                            if (!showStatus) {
+                                btnClass += "border-gray-200 text-gray-700 hover:border-gold-500 hover:bg-gold-50";
+                            } else if (isCorrect) {
+                                btnClass += "border-green-500 bg-green-50 text-green-700 shadow-md";
+                            } else if (isSelected && !isCorrect) {
+                                btnClass += "border-red-500 bg-red-50 text-red-700 animate-shake";
+                            } else {
+                                btnClass += "border-gray-100 text-gray-400 opacity-50";
+                            }
+
+                            return (
+                                <button key={idx} disabled={showStatus} onClick={() => handleAnswer(idx)} className={btnClass}>
+                                    <span>{opt}</span>
+                                    {showStatus && isCorrect && <Icons.Check className="text-green-600" />}
+                                    {showStatus && isSelected && !isCorrect && <Icons.X className="text-red-600" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {showExplanation && (
+                        <div className="mt-8 p-6 bg-navy-50 rounded-xl border-l-4 border-navy-900 animate-fade-in-down">
+                            <h4 className="text-navy-900 font-bold mb-2">Explicación:</h4>
+                            <p className="text-gray-700 mb-6">{q.explanation}</p>
+                            <Button onClick={nextQuestion} variant="primary" className="w-full" icon={Icons.ChevronRight}>Siguiente</Button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // 4.3 Simulador de Habla (Timer SVG)
+        const SpeechSimulator = ({ prompts }) => {
+            const [isActive, setIsActive] = useState(false);
+            const [time, setTime] = useState(45);
+            const [currentPrompt, setCurrentPrompt] = useState(prompts[0]);
+            
+            const radius = 60;
+            const circumference = 2 * Math.PI * radius;
+            const strokeDashoffset = circumference - (time / 45) * circumference;
+
+            useEffect(() => {
+                let interval = null;
+                if (isActive && time > 0) {
+                    interval = setInterval(() => {
+                        setTime(t => {
+                            if (t <= 5 && t > 1) playSound('tick');
+                            if (t === 1) playSound('correct'); // Fin del tiempo
+                            return t - 1;
+                        });
+                    }, 1000);
+                } else if (time === 0) {
+                    setIsActive(false);
+                }
+                return () => clearInterval(interval);
+            }, [isActive, time]);
+
+            const startSimulation = () => {
+                setCurrentPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
+                setTime(45);
+                setIsActive(true);
+            };
+
+            return (
+                <div className="bg-navy-900 text-white p-10 rounded-3xl shadow-2xl flex flex-col items-center text-center relative overflow-hidden w-full max-w-2xl mx-auto">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500 rounded-full opacity-10 blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                    
+                    <Icons.Mic size={48} className="text-gold-500 mb-6 animate-pulse-slow" />
+                    
+                    <h3 className="text-gold-500 font-bold tracking-widest uppercase text-sm mb-4">Pregunta del Jurado</h3>
+                    <p className="text-2xl md:text-3xl font-light mb-10 min-h-[100px] flex items-center justify-center">"{currentPrompt}"</p>
+                    
+                    <div className="relative w-48 h-48 mb-10 flex items-center justify-center">
+                        <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 140 140">
+                            <circle cx="70" cy="70" r={radius} stroke="#112240" strokeWidth="8" fill="none" />
+                            <circle 
+                                className="progress-ring__circle" 
+                                cx="70" cy="70" r={radius} 
+                                stroke={time <= 10 ? '#ef4444' : '#C5A880'} 
+                                strokeWidth="8" fill="none" 
+                                strokeDasharray={circumference} 
+                                strokeDashoffset={strokeDashoffset} 
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                        <div className="text-5xl font-bold font-mono" style={{ color: time <= 10 ? '#ef4444' : 'white' }}>
+                            {time}
+                        </div>
+                    </div>
+
+                    {!isActive && time === 45 && (
+                        <Button onClick={startSimulation} variant="secondary" icon={Icons.Play} className="px-8 py-4 text-xl">Comenzar 45s</Button>
+                    )}
+                    {!isActive && time === 0 && (
+                        <Button onClick={startSimulation} variant="primary" icon={Icons.Refresh}>Intentar otra pregunta</Button>
+                    )}
+                    {isActive && (
+                        <p className="text-gold-300 italic animate-pulse">Habla en voz alta ahora...</p>
+                    )}
+                </div>
+            );
+        };
+
+        // 4.4 Confetti Component (Matemático, sin librerías)
+        const Confetti = () => {
+            const [particles, setParticles] = useState([]);
+            useEffect(() => {
+                const colors = ['#C5A880', '#0A192F', '#ffffff', '#e6d5b8'];
+                const newParticles = Array.from({ length: 100 }).map((_, i) => ({
+                    id: i,
+                    x: Math.random() * 100, // vw
+                    y: -20 - Math.random() * 100, // vh
+                    size: 5 + Math.random() * 10, // px
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    duration: 3 + Math.random() * 4, // s
+                    delay: Math.random() * 2 // s
+                }));
+                setParticles(newParticles);
+            }, []);
+
+            return (
+                <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+                    {particles.map(p => (
+                        <div key={p.id} className="absolute rounded-sm opacity-80"
+                            style={{
+                                left: `${p.x}vw`, top: `${p.y}vh`, width: `${p.size}px`, height: `${p.size}px`,
+                                backgroundColor: p.color,
+                                animation: `fall ${p.duration}s linear ${p.delay}s forwards`,
+                            }}
+                        />
+                    ))}
+                    <style>{`
+                        @keyframes fall {
+                            to { transform: translateY(150vh) rotate(720deg); }
+                        }
+                    `}</style>
+                </div>
+            );
+        };
+
+
+        // =====================================================================
+        // 5. DATOS DE LA MASTERCLASS (Contenido rico para B1)
+        // =====================================================================
+
+        const MASTERCLASS_DATA = [
+            {
+                id: 'welcome',
+                title: "Bienvenida al Escenario",
+                subtitle: "Introducción",
+                content: () => (
+                    <div className="text-center animate-fade-in-up">
+                        <Icons.Star size={64} className="mx-auto text-gold-500 mb-6 animate-pulse-slow" />
+                        <h2 className="text-5xl font-extrabold text-navy-900 mb-6">Eloquence & Poise</h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                            Bienvenida a tu entrenamiento intensivo. Aquí aprenderás a transformar un inglés básico en un <strong className="text-navy-900">inglés sofisticado y elegante</strong> usando herramientas simples (SO/SUCH) y vocabulario de alto impacto.
+                        </p>
+                        <div className="flex justify-center gap-4">
+                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Gramática B1</span>
+                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Pronunciación</span>
+                            <span className="bg-navy-50 text-navy-900 px-4 py-2 rounded-lg font-semibold flex items-center gap-2"><Icons.Check size={16}/> Simulador</span>
+                        </div>
+                    </div>
+                ),
+                note: "Explica al estudiante que el objetivo de hoy no es aprender gramática complicada, sino aprender a SONAR profesional y emocional con herramientas que ya conocen (SO y SUCH)."
+            },
+            {
+                id: 'grammar-intro',
+                title: "La Fórmula de la Emoción",
+                subtitle: "Gramática Central",
+                content: () => (
+                    <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl animate-fade-in-up">
+                        <div className="bg-white rounded-3xl p-8 shadow-xl border-t-8 border-navy-900 hover:shadow-2xl transition-all">
+                            <h3 className="text-2xl font-bold text-navy-900 mb-2">Usando <span className="text-blue-600 bg-blue-50 px-2 py-1 rounded">SO</span></h3>
+                            <p className="text-gray-500 mb-6 text-sm">Para intensificar un adjetivo (sentimiento o descripción).</p>
+                            <div className="bg-gray-50 p-4 rounded-xl font-mono text-center mb-6 border border-gray-200">
+                                SO + ADJETIVO
+                            </div>
+                            <ul className="space-y-4">
+                                <li className="flex items-center gap-3"><TTSButton text="I am so proud." className="bg-blue-50 text-blue-600"/> "I am <Chunk type="so">so</Chunk> <Chunk type="adj">proud</Chunk>."</li>
+                                <li className="flex items-center gap-3"><TTSButton text="The stage is so beautiful." className="bg-blue-50 text-blue-600"/> "The stage is <Chunk type="so">so</Chunk> <Chunk type="adj">beautiful</Chunk>."</li>
+                            </ul>
+                        </div>
+                        <div className="bg-white rounded-3xl p-8 shadow-xl border-t-8 border-gold-500 hover:shadow-2xl transition-all">
+                            <h3 className="text-2xl font-bold text-navy-900 mb-2">Usando <span className="text-orange-600 bg-orange-50 px-2 py-1 rounded">SUCH</span></h3>
+                            <p className="text-gray-500 mb-6 text-sm">Para intensificar un sustantivo (una cosa, persona o evento).</p>
+                            <div className="bg-gray-50 p-4 rounded-xl font-mono text-center mb-6 border border-gray-200">
+                                SUCH + (A/AN) + ADJ + COSA
+                            </div>
+                            <ul className="space-y-4">
+                                <li className="flex items-center gap-3"><TTSButton text="This is such an honor." className="bg-orange-50 text-orange-600"/> "This is <Chunk type="such">such</Chunk> an <Chunk type="noun">honor</Chunk>."</li>
+                                <li className="flex items-center gap-3"><TTSButton text="We have such a great team." className="bg-orange-50 text-orange-600"/> "We have <Chunk type="such">such</Chunk> a <Chunk type="adj">great</Chunk> <Chunk type="noun">team</Chunk>."</li>
+                            </ul>
+                        </div>
+                    </div>
+                ),
+                note: "Regla de oro: Pide al estudiante que mire la última palabra de la idea. Si la última palabra es una COSA (honor, team, day, dress), automáticamente necesita SUCH. Si la última palabra es descriptiva (beautiful, happy), usa SO."
+            },
+            {
+                id: 'vocab-feelings',
+                title: "Expresando Gratitud",
+                subtitle: "Flashcards: Sentimientos",
+                content: () => (
+                    <div className="w-full animate-fade-in-up">
+                        <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Toca cada tarjeta para voltearla, leer su significado y escuchar la pronunciación. Memoriza estos adjetivos para usar con <strong>SO</strong>.</p>
+                        <FlashcardDeck cards={[
+                            { term: "Grateful", def: "Agradecida desde el fondo del corazón.", example: "I am <span class='text-blue-400'>so</span> <span class='text-green-400'>grateful</span> for this opportunity.", exampleRaw: "I am so grateful for this opportunity." },
+                            { term: "Thrilled", def: "Extremadamente emocionada y feliz.", example: "We are <span class='text-blue-400'>so</span> <span class='text-green-400'>thrilled</span> to be in this city.", exampleRaw: "We are so thrilled to be in this city." },
+                            { term: "Honored", def: "Sentirse respetada y privilegiada.", example: "I feel <span class='text-blue-400'>so</span> <span class='text-green-400'>honored</span> to represent my country.", exampleRaw: "I feel so honored to represent my country." },
+                            { term: "Overwhelmed", def: "Abrumada (usualmente de buena manera, por tanto apoyo).", example: "I am <span class='text-blue-400'>so</span> <span class='text-green-400'>overwhelmed</span> by your love.", exampleRaw: "I am so overwhelmed by your love." }
+                        ]} />
+                    </div>
+                ),
+                note: "La palabra 'grateful' es tu salvavidas. Si alguna vez te hacen una pregunta difícil y tu mente se queda en blanco, sonríe y di: 'First of all, I am SO grateful to be here...'. Esto te da 3 segundos para pensar."
+            },
+            {
+                id: 'vocab-events',
+                title: "Describiendo el Evento",
+                subtitle: "Flashcards: Sustantivos (Cosas)",
+                content: () => (
+                    <div className="w-full animate-fade-in-up">
+                        <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Aprende estas combinaciones elegantes para usar con <strong>SUCH</strong> cuando hables del evento o las personas.</p>
+                        <FlashcardDeck cards={[
+                            { term: "Unforgettable experience", def: "Una experiencia inolvidable.", example: "This journey has been <span class='text-orange-400'>such</span> an <span class='text-purple-400'>unforgettable experience</span>.", exampleRaw: "This journey has been such an unforgettable experience." },
+                            { term: "Incredible platform", def: "Una plataforma increíble (para alzar tu voz).", example: "This pageant is <span class='text-orange-400'>such</span> an <span class='text-purple-400'>incredible platform</span>.", exampleRaw: "This pageant is such an incredible platform." },
+                            { term: "Warm welcome", def: "Una cálida bienvenida.", example: "Thank you for <span class='text-orange-400'>such</span> a <span class='text-purple-400'>warm welcome</span>.", exampleRaw: "Thank you for such a warm welcome." }
+                        ]} />
+                    </div>
+                ),
+                note: "Nota la pronunciación de 'unforgettable' (un-for-GET-a-ble). Asegúrate de que el estudiante acentúe la sílaba GET."
+            },
+            {
+                id: 'quiz-1',
+                title: "Demuestra tu Conocimiento",
+                subtitle: "Práctica Interactiva",
+                content: () => (
+                    <div className="w-full max-w-3xl mx-auto">
+                        <QuizMCQ questions={[
+                            { 
+                                text: "The judges were _____ kind to me today.", 
+                                options: ["so", "such"], ans: 0, 
+                                explanation: "'Kind' es un adjetivo (amable). No hay ninguna 'cosa' al final, por lo tanto usamos SO."
+                            },
+                            { 
+                                text: "It is _____ a pleasure to meet all of you.", 
+                                options: ["so", "such"], ans: 1, 
+                                explanation: "'Pleasure' es un sustantivo (un placer). Además tenemos el artículo 'a', lo que siempre indica SUCH."
+                            },
+                            { 
+                                text: "My evening gown makes me feel _____ confident.", 
+                                options: ["so", "such"], ans: 0, 
+                                explanation: "'Confident' (segura) es un sentimiento/adjetivo. Usamos SO."
+                            },
+                            { 
+                                text: "We are staying in _____ a beautiful hotel.", 
+                                options: ["so", "such"], ans: 1, 
+                                explanation: "'Hotel' es una cosa (sustantivo). Usamos SUCH."
+                            }
+                        ]} />
+                    </div>
+                ),
+                note: "Deja que el estudiante razone la respuesta en voz alta antes de hacer clic. Si fallan, que lean la explicación y luego repitan la oración completa en voz alta."
+            },
+            {
+                id: 'advanced-that',
+                title: "Impacto y Consecuencia",
+                subtitle: "Gramática Nivel 2",
+                content: () => (
+                    <div className="w-full max-w-4xl mx-auto animate-fade-in-up text-center">
+                        <Icons.Award size={64} className="mx-auto text-navy-900 mb-6" />
+                        <h3 className="text-2xl font-bold text-navy-900 mb-6">Agregando "THAT" para contar historias</h3>
+                        <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                            Si quieres sonar realmente avanzada, usa <strong className="text-red-500">THAT</strong> (que) después de tu frase con SO/SUCH para explicar el resultado o la consecuencia de esa emoción.
+                        </p>
+                        
+                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500 mb-6 text-left">
+                            <h4 className="font-bold text-gray-400 uppercase tracking-widest text-sm mb-4">Ejemplo 1 (SO... THAT)</h4>
+                            <p className="text-xl">"I was <Chunk type="so">so</Chunk> <Chunk type="adj">nervous</Chunk> <Chunk type="that">that</Chunk> I started crying."</p>
+                            <p className="text-sm text-gray-500 mt-2 italic">(Estaba tan nerviosa que empecé a llorar).</p>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-500 text-left">
+                            <h4 className="font-bold text-gray-400 uppercase tracking-widest text-sm mb-4">Ejemplo 2 (SUCH... THAT)</h4>
+                            <p className="text-xl">"It was <Chunk type="such">such</Chunk> an <Chunk type="adj">inspiring</Chunk> <Chunk type="noun">moment</Chunk> <Chunk type="that">that</Chunk> I will never forget it."</p>
+                            <p className="text-sm text-gray-500 mt-2 italic">(Fue un momento tan inspirador que nunca lo olvidaré).</p>
+                        </div>
+                    </div>
+                ),
+                note: "Este es el secreto de las buenas oradoras. No solo dicen que algo fue bonito, explican el IMPACTO que tuvo en ellas. Practiquen completar frases: 'I am so happy that... (I can't stop smiling)'."
+            },
+            {
+                id: 'magic-pause',
+                title: "La Pausa Mágica",
+                subtitle: "Técnica de Oratoria",
+                content: () => (
+                    <div className="w-full max-w-4xl mx-auto animate-fade-in-up flex flex-col items-center">
+                        <div className="bg-navy-900 text-white p-12 rounded-[2.5rem] w-full shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500 rounded-full opacity-20 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                            
+                            <h3 className="text-3xl font-bold mb-6 flex items-center gap-4 text-gold-500">
+                                <Icons.Mic className="animate-pulse" /> Actuación de Voz
+                            </h3>
+                            <p className="text-xl mb-10 font-light leading-relaxed">
+                                Nunca hables como un robot. Las reinas de belleza y presentadores hacen una <strong className="text-gold-500 font-bold">micro-pausa</strong> antes de la palabra importante para crear drama y mostrar sinceridad.
+                            </p>
+                            
+                            <div className="space-y-6">
+                                <div className="bg-white/10 p-6 rounded-2xl flex items-center gap-6 border border-white/20 hover:bg-white/20 transition-all cursor-pointer group">
+                                    <TTSButton text="I am... so proud of my team." className="bg-gold-500 text-navy-900 group-hover:scale-110" />
+                                    <span className="text-2xl font-light">"I am <span className="opacity-40">...</span> <strong className="text-gold-500 text-3xl">SO</strong> proud of my team."</span>
+                                </div>
+                                <div className="bg-white/10 p-6 rounded-2xl flex items-center gap-6 border border-white/20 hover:bg-white/20 transition-all cursor-pointer group">
+                                    <TTSButton text="This is... such a beautiful dress." className="bg-gold-500 text-navy-900 group-hover:scale-110" />
+                                    <span className="text-2xl font-light">"This is <span className="opacity-40">...</span> <strong className="text-gold-500 text-3xl">SUCH</strong> a beautiful dress."</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ),
+                note: "Ejercicio físico: Haz que el estudiante ponga la mano en su corazón al momento de hacer la pausa. La pausa física del cuerpo ayuda a hacer la pausa de la voz."
+            },
+            {
+                id: 'speech-sim',
+                title: "Simulador Bajo Presión",
+                subtitle: "Práctica Final",
+                content: () => (
+                    <div className="w-full animate-fade-in-up">
+                        <SpeechSimulator prompts={[
+                            "Why do you want to win this competition?",
+                            "What is the most important lesson you learned this week?",
+                            "Describe the women standing behind you on stage.",
+                            "What message do you have for the young girls watching you today?",
+                            "Tell us about a challenge you overcame to be here."
+                        ]} />
+                    </div>
+                ),
+                note: "Instrucciones: El estudiante no puede escribir nada. Debe leer la pregunta, presionar comenzar, y usar al menos un SO o SUCH en su respuesta de 45 segundos. Si se equivocan, ¡que sigan hablando! No se permiten disculpas en el escenario."
+            },
+            {
+                id: 'graduation',
+                title: "Masterclass Completada",
+                subtitle: "Certificación",
+                content: () => (
+                    <div className="text-center animate-fade-in-up bg-white p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden max-w-2xl mx-auto">
+                        <Confetti />
+                        <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-gold-300 via-gold-500 to-navy-900"></div>
+                        <Icons.Award size={80} className="mx-auto text-gold-500 mb-6" />
+                        <h2 className="text-4xl font-extrabold text-navy-900 mb-4">¡Felicidades!</h2>
+                        <p className="text-lg text-gray-600 mb-8">Has dominado el uso de la intensidad emocional en inglés.</p>
+                        
+                        <div className="bg-gray-50 p-6 rounded-xl text-left border border-gray-200">
+                            <h4 className="font-bold text-navy-900 mb-4 uppercase text-sm tracking-widest">Tu Kit de Supervivencia:</h4>
+                            <ul className="space-y-3 text-gray-700 font-medium">
+                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> SO + Sentimiento ("So grateful")</li>
+                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> SUCH + Cosa ("Such an honor")</li>
+                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> La Pausa Mágica para sonar sincera</li>
+                                <li className="flex items-center gap-2"><Icons.Check className="text-green-500"/> Cláusula "THAT" para explicar impacto</li>
+                            </ul>
+                        </div>
+                    </div>
+                ),
+                note: "Elogia al estudiante. Tarea: Ver 3 entrevistas de certámenes en YouTube y detectar cuántas veces dicen 'So' o 'Such'."
+            }
+        ];
+
+        // =====================================================================
+        // 6. APLICACIÓN PRINCIPAL (Layout y Estado)
+        // =====================================================================
+
+        const App = () => {
+            const [currentSlide, setCurrentSlide] = useState(0);
+            const [showNotes, setShowNotes] = useState(false);
+            const [showMenu, setShowMenu] = useState(false);
+            const [maxUnlocked, setMaxUnlocked] = useState(0);
+
+            // Cargar progreso
+            useEffect(() => {
+                const saved = localStorage.getItem('masterclassProgress');
+                if (saved) {
+                    const parsed = parseInt(saved, 10);
+                    setMaxUnlocked(parsed);
+                    setCurrentSlide(parsed);
+                }
+            }, []);
+
+            // Guardar progreso
+            useEffect(() => {
+                if (currentSlide > maxUnlocked) {
+                    setMaxUnlocked(currentSlide);
+                    localStorage.setItem('masterclassProgress', currentSlide);
+                }
+            }, [currentSlide, maxUnlocked]);
+
+            const nextSlide = () => setCurrentSlide(p => Math.min(p + 1, MASTERCLASS_DATA.length - 1));
+            const prevSlide = () => setCurrentSlide(p => Math.max(p - 1, 0));
+            const goToSlide = (idx) => {
+                setCurrentSlide(idx);
+                setShowMenu(false);
+            };
+
+            const slide = MASTERCLASS_DATA[currentSlide];
+
+            return (
+                <div className="min-h-screen flex flex-col font-sans overflow-hidden bg-[#F8F9FA] text-gray-800">
+                    
+                    {/* ENCABEZADO */}
+                    <header className="bg-navy-900 text-white h-16 flex items-center justify-between px-4 md:px-8 shadow-md relative z-30">
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => setShowMenu(!showMenu)} className="p-2 hover:bg-navy-800 rounded-lg transition-colors">
+                                <Icons.Menu />
+                            </button>
+                            <h1 className="font-semibold text-lg hidden md:block text-gold-500">Masterclass Premium</h1>
+                        </div>
+                        
+                        {/* Barra de Progreso Global */}
+                        <div className="flex-1 max-w-md mx-8">
+                            <div className="bg-navy-800 h-2 rounded-full overflow-hidden">
+                                <div 
+                                    className="bg-gold-500 h-full transition-all duration-700 ease-out"
+                                    style={{ width: `${((currentSlide + 1) / MASTERCLASS_DATA.length) * 100}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={() => setShowNotes(!showNotes)}
+                            className={`px-4 py-2 text-sm font-bold rounded-lg transition-all border ${showNotes ? 'bg-gold-500 text-navy-900 border-gold-500' : 'text-gold-500 border-gold-500 hover:bg-gold-500/10'}`}
+                        >
+                            {showNotes ? 'Ocultar Notas' : 'Notas Docente'}
+                        </button>
+                    </header>
+
+                    {/* CUERPO PRINCIPAL */}
+                    <div className="flex flex-1 relative overflow-hidden">
+                        
+                        {/* Drawer del Menú */}
+                        <div className={`absolute top-0 left-0 h-full w-72 bg-white shadow-2xl z-20 transition-transform duration-300 transform ${showMenu ? 'translate-x-0' : '-translate-x-full'}`}>
+                            <div className="p-6 h-full overflow-y-auto">
+                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Contenido del Curso</h3>
+                                <div className="space-y-2">
+                                    {MASTERCLASS_DATA.map((item, idx) => (
+                                        <button 
+                                            key={item.id}
+                                            onClick={() => goToSlide(idx)}
+                                            disabled={idx > maxUnlocked}
+                                            className={`w-full text-left p-3 rounded-lg text-sm transition-colors flex items-center justify-between
+                                                ${currentSlide === idx ? 'bg-navy-50 text-navy-900 font-bold border-l-4 border-navy-900' : 
+                                                  idx > maxUnlocked ? 'opacity-40 cursor-not-allowed text-gray-500' : 'hover:bg-gray-50 text-gray-700'}`}
+                                        >
+                                            <span className="truncate">{idx + 1}. {item.title}</span>
+                                            {idx < maxUnlocked && currentSlide !== idx && <Icons.Check size={14} className="text-green-500"/>}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Área de la Diapositiva */}
+                        <main className="flex-1 overflow-y-auto relative bg-dot-pattern">
+                            {/* Patrón de fondo sutil */}
+                            <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#0A192F 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                            
+                            <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 min-h-full flex flex-col justify-center relative z-10">
+                                
+                                <div className="text-center mb-16 animate-fade-in-down">
+                                    <span className="inline-block px-4 py-1 rounded-full bg-gold-100 text-gold-700 font-bold tracking-[0.2em] uppercase text-xs mb-4 shadow-sm border border-gold-300">
+                                        Módulo {currentSlide + 1} • {slide.subtitle}
+                                    </span>
+                                    <h2 className="text-4xl md:text-5xl font-extrabold text-navy-900">{slide.title}</h2>
+                                </div>
+                                
+                                <div className="flex justify-center w-full pb-20">
+                                    {slide.content()}
+                                </div>
+                            </div>
+                        </main>
+
+                        {/* Panel de Notas del Profesor */}
+                        <aside className={`w-80 bg-white border-l border-gray-200 shadow-[-10px_0_30px_rgba(0,0,0,0.05)] z-10 transition-transform duration-300 absolute right-0 h-full ${showNotes ? 'translate-x-0' : 'translate-x-full'}`}>
+                            <div className="p-6 h-full flex flex-col">
+                                <h3 className="text-lg font-bold text-navy-900 border-b-2 border-gold-500 pb-4 mb-6 flex items-center gap-2">
+                                    Guía Pedagógica
+                                </h3>
+                                <div className="bg-gold-100/50 p-5 rounded-xl border-l-4 border-gold-500 text-gray-700 text-sm leading-relaxed flex-1">
+                                    <span className="block font-bold text-gold-700 mb-3 uppercase tracking-wider text-xs flex items-center gap-2">
+                                        <Icons.Star size={14}/> Para esta diapositiva:
+                                    </span>
+                                    {slide.note}
+                                </div>
+                            </div>
+                        </aside>
+
+                    </div>
+
+                    {/* PIE DE PÁGINA / CONTROLES */}
+                    <footer className="bg-white border-t border-gray-200 h-20 px-4 md:px-8 flex justify-between items-center z-30 shadow-[0_-5px_20px_rgba(0,0,0,0.03)] relative">
+                        <Button 
+                            onClick={prevSlide}
+                            disabled={currentSlide === 0}
+                            variant="ghost"
+                            className="text-gray-600 border border-gray-200 bg-white"
+                            icon={null} // Sobrescribir para poner ícono a la izquierda
+                        >
+                            <Icons.ChevronLeft size={20} /> <span className="hidden md:inline">Anterior</span>
+                        </Button>
+                        
+                        <div className="text-gray-400 font-bold tracking-wider text-sm hidden sm:block">
+                            {currentSlide + 1} / {MASTERCLASS_DATA.length}
+                        </div>
+
+                        <Button 
+                            onClick={nextSlide}
+                            disabled={currentSlide === MASTERCLASS_DATA.length - 1}
+                            variant="primary"
+                        >
+                            <span className="hidden md:inline">Continuar</span> <Icons.ChevronRight size={20} />
+                        </Button>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
